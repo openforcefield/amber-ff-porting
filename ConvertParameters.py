@@ -158,7 +158,7 @@ def get_smarts(prefix, atom_idxs):
   # around where we cleave the residues
   subsetmol = OEChem.OEGraphMol()
   oepred = OEChem.PyAtomPredicate(lambda x:x.GetIdx() in atom_indices_of_interest)
-  OEChem.OESubsetMol(subsetmol, oemol, oepred, True)
+  OEChem.OESubsetMol(subsetmol, oemol, oepred)
   smiles_options = (OEChem.OESMILESFlag_Canonical | OEChem.OESMILESFlag_Isotopes |
                     OEChem.OESMILESFlag_RGroups)
 
