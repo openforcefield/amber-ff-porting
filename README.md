@@ -2,7 +2,7 @@
 
 This is a work in progress. Changes should be committed to `master` at this point.
 
-Requires an OE license
+Requires an OE license.
 
 `conda install -c conda-forge -c omnia -c openeye ambertools openforcefield openeye-toolkits`
 
