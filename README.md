@@ -6,5 +6,5 @@ Requires an OE license
 
 `conda install -c conda-forge -c omnia -c openeye ambertools openforcefield openeye-toolkits`
 
-`GenerateSystems.sh` will use AMBERTools to generate various dipepetides
-`ConvertParameters.py` will attempt to convert prmtops to OFFXML
+* `GenerateSystems.sh` will use AMBERTools to generate various dipepetides
+* `ConvertParameters.py` will attempt to convert prmtops to OFFXML
