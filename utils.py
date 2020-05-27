@@ -9,7 +9,7 @@ def fix_carboxylate_bond_orders(offmol):
         for bond in atom1.bonds:
             atom2 = [atom for atom in bond.atoms if not atom == atom1][0]
             if atom2.element.atomic_number == 8 and atom2.formal_charge == -1:
-                # If we find a bond to a SECOND carbanion, then zero both 
+                # If we find a bond to a SECOND oxyanion, then zero both 
                 # the carbon and the second oxygen's formal charges, and 
                 # set the bond order to 2
                 if oxyanion_seen:
