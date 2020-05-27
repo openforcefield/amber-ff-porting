@@ -3,6 +3,8 @@ import openeye.oechem as OEChem
 import parmed as ParmEd
 from openforcefield.topology import Molecule
 from simtk import unit
+from utils import fix_carboxylate_bond_orders
+
 
 def props(cls):
   return [ i for i in cls.__dict__.keys() if i[:1] != '_' ]
@@ -133,6 +135,7 @@ def get_smarts(prefix, atom_idxs):
   """Get the SMARTS corresponding to a list of atom indices"""
 
   offmol = Molecule.from_file(prefix + '.mol2')
+  fix_carboxylate_bond_orders(offmol)
   if prefix in prefix2pmd_struct:
     pmd_struct = prefix2pmd_struct[prefix]
   else:    
@@ -171,6 +174,7 @@ def get_smarts(prefix, atom_idxs):
   smiles = OEChem.OECreateSmiString(subsetmol, smiles_options)
 
   return smiles
+
 
 # Lists of residues that can occur at various positions on the tripeptide
 allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
