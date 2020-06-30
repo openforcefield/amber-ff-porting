@@ -1,0 +1,224 @@
+HEADER  Printed by mdgx
+REMARK   4
+REMARK   4 Topology used to create this configuration:
+REMARK   4   ALA_ARG_ALA.prmtop
+REMARK   4
+REMARK   4 Restraints used to create this configuration:
+REMARK   4 &rst
+REMARK   4  iat=15,17,19,39,
+REMARK   4  r1=-191.1479, r2=-162.5000, r3=-152.5000, r4=-123.8521,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=17,19,39,41,
+REMARK   4  r1=48.8521, r2=77.5000, r3=87.5000, r4=116.1479,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=6,8,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=6,18,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=6,42,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=6,52,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=16,18,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=16,42,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=16,52,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=40,42,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=40,52,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=50,52,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=24,21,19,17,
+REMARK   4  r1=-83.6367, r2=-54.9888, r3=-44.9888, r4=-16.3410,
+REMARK   4  rk2=16.0000, rk3=16.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=27,24,21,19,
+REMARK   4  r1=-78.4233, r2=-49.7754, r3=-39.7754, r4=-11.1275,
+REMARK   4  rk2=16.0000, rk3=16.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=34,6,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=35,6,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=37,6,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=38,6,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=34,16,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=35,16,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=37,16,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=38,16,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=34,40,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=35,40,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=37,40,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=38,40,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=34,50,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=35,50,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=37,50,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4 &rst
+REMARK   4  iat=38,50,
+REMARK   4  r1=2.0000, r2=2.5000, r3=97.5000, r4=98.0000,
+REMARK   4  rk2=64.0000, rk3=64.0000,
+REMARK   4 &end
+REMARK   4
+REMARK   4 Molecular mechanics energy decomposition (kcal/mol):
+REMARK   4   Bond                3.0860
+REMARK   4   Angle               5.3649
+REMARK   4   Dihedral           31.0813 (sum of proper and improper terms)
+REMARK   4   van-der Waals      -0.8661 (includes 1-4 interactions)
+REMARK   4   Electrostatic    -188.1503 (includes 1-4 interactions)
+REMARK   4   Restraints          1.2350
+REMARK   4   Total energy     -148.2491 (includes restraint energy)
+REMARK   4
+CRYST1  200.000  200.000  200.000  90.00  90.00  90.00 P 1 1 1
+ATOM      1 H1   ACE A   0      24.399  29.401  25.520
+ATOM      2 CH3  ACE A   0      24.975  29.122  24.638
+ATOM      3 H2   ACE A   0      24.605  29.669  23.773
+ATOM      4 H3   ACE A   0      24.880  28.051  24.469
+ATOM      5 C    ACE A   0      26.427  29.469  24.868
+ATOM      6 O    ACE A   0      26.776  29.992  25.919
+ATOM      7 N    ALA A   1      27.274  29.180  23.881
+ATOM      8 H    ALA A   1      26.901  28.767  23.043
+ATOM      9 CA   ALA A   1      28.711  29.463  23.930
+ATOM     10 HA   ALA A   1      29.123  28.953  24.802
+ATOM     11 CB   ALA A   1      29.364  28.869  22.674
+ATOM     12 HB1  ALA A   1      28.975  29.362  21.782
+ATOM     13 HB2  ALA A   1      30.445  29.008  22.713
+ATOM     14 HB3  ALA A   1      29.153  27.800  22.616
+ATOM     15 C    ALA A   1      29.023  30.969  24.081
+ATOM     16 O    ALA A   1      28.213  31.835  23.738
+ATOM     17 N    ARG A   2      30.242  31.314  24.524
+ATOM     18 H    ARG A   2      30.896  30.565  24.705
+ATOM     19 CA   ARG A   2      30.535  32.625  25.132
+ATOM     20 HA   ARG A   2      29.863  33.364  24.715
+ATOM     21 CB   ARG A   2      30.323  32.580  26.667
+ATOM     22 HB2  ARG A   2      31.008  31.839  27.085
+ATOM     23 HB3  ARG A   2      30.624  33.545  27.077
+ATOM     24 CG   ARG A   2      28.919  32.266  27.222
+ATOM     25 HG2  ARG A   2      28.681  31.227  27.000
+ATOM     26 HG3  ARG A   2      28.968  32.354  28.308
+ATOM     27 CD   ARG A   2      27.768  33.161  26.725
+ATOM     28 HD2  ARG A   2      27.492  32.874  25.716
+ATOM     29 HD3  ARG A   2      26.894  32.967  27.351
+ATOM     30 NE   ARG A   2      28.110  34.600  26.798
+ATOM     31 HE   ARG A   2      28.261  34.971  27.720
+ATOM     32 CZ   ARG A   2      28.367  35.407  25.782
+ATOM     33 NH1  ARG A   2      28.129  35.085  24.541
+ATOM     34 HH11 ARG A   2      27.708  34.189  24.340
+ATOM     35 HH12 ARG A   2      28.383  35.708  23.798
+ATOM     36 NH2  ARG A   2      28.910  36.570  25.994
+ATOM     37 HH21 ARG A   2      29.139  36.862  26.925
+ATOM     38 HH22 ARG A   2      29.274  37.085  25.210
+ATOM     39 C    ARG A   2      31.943  33.133  24.814
+ATOM     40 O    ARG A   2      32.831  33.181  25.656
+ATOM     41 N    ALA A   3      32.081  33.625  23.585
+ATOM     42 H    ALA A   3      31.313  33.499  22.949
+ATOM     43 CA   ALA A   3      33.020  34.701  23.278
+ATOM     44 HA   ALA A   3      33.980  34.483  23.753
+ATOM     45 CB   ALA A   3      33.232  34.749  21.760
+ATOM     46 HB1  ALA A   3      32.292  34.977  21.255
+ATOM     47 HB2  ALA A   3      33.963  35.520  21.512
+ATOM     48 HB3  ALA A   3      33.607  33.787  21.407
+ATOM     49 C    ALA A   3      32.504  36.051  23.831
+ATOM     50 O    ALA A   3      31.296  36.230  24.038
+ATOM     51 N    NME A   4      33.417  37.005  24.047
+ATOM     52 H    NME A   4      34.383  36.785  23.855
+ATOM     53 CH3  NME A   4      33.114  38.346  24.545
+ATOM     54 HH31 NME A   4      32.718  38.286  25.560
+ATOM     55 HH32 NME A   4      34.020  38.956  24.554
+ATOM     56 HH33 NME A   4      32.374  38.825  23.901
+END
