@@ -1,6 +1,6 @@
 from simtk import openmm
 from simtk.openmm import XmlSerializer, CustomBondForce, CustomTorsionForce
-from simtk.openmm.app importPDBFile
+from simtk.openmm.app import PDBFile
 
 
 # Create an empty system
@@ -15,7 +15,7 @@ for atom in topology.atoms():
     system.addParticle(atom.element.mass)
     
 # Execute the qrst file in the current Python interpreter
-#qrst = open('Conf42.qrst').read()
+qrst = open('Conf42.qrst').read()
 #qrst = qrst.replace('CustomTorsionForce* ','')
 #qrst = qrst.replace('CustomBondForce* ','')
 #qrst = qrst.replace('new ','')
