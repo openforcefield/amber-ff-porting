@@ -183,10 +183,6 @@ allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID',
 trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
            'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL', 'CYX' ]
 
-allres = [ 'PRO' ]
-
-trmres = [ 'PRO' ]
-
 # Main chain, N-terminal, and C-terminal residues
 ResClasses = [ 'MainChain', 'NTerminal', 'CTerminal' ]
 
@@ -484,13 +480,13 @@ for bond in AllBonds:
   # them into a dictionary, with all the keywords defined to feed into the OpenFF Toolkit's
   # BondHandler.add_parameter function
   bond_dicts.append({'smirks':get_smarts(prefix, (bond.atom1pos, bond.atom2pos)), 
-             'k': bond.K * amber_bond_k_unit , 
-             'length': bond.Leq * amber_bond_length_unit,
-             'id': parameter_name})
+                     'k': 2.0 * bond.K * amber_bond_k_unit , 
+                     'length': bond.Leq * amber_bond_length_unit,
+                     'id': parameter_name})
 
 # Repeat the above for angles
 amber_angle_k_unit = unit.kilocalorie_per_mole / unit.radian**2
-amber_angle_angle_unit = unit.radian
+amber_angle_angle_unit = unit.degree
 angle_dicts = []
 for angle in AllAngls:
   prmtop = PrmtopLibrary[angle.prmtopID]
@@ -501,13 +497,13 @@ for angle in AllAngls:
   parameter_name = f'A14SB-{full_resname}-{angle.atomType1}_{angle.atomType2}_{angle.atomType3}'
   angle_dicts.append({'smirks':get_smarts(prefix,
                                           (angle.atom1pos, angle.atom2pos, angle.atom3pos)), 
-                      'k': angle.K * amber_angle_k_unit, 
+                      'k': 2.0 * angle.K * amber_angle_k_unit, 
                       'angle': angle.Teq * amber_angle_angle_unit,
                       'id': parameter_name})
 
 # Repeat the above for dihedrals
 amber_proper_k_unit = unit.kilocalorie_per_mole
-amber_proper_phase_unit = unit.radian
+amber_proper_phase_unit = unit.degree
 proper_dicts = {}
 for dihedral in AllDihes:
   prmtop = PrmtopLibrary[dihedral.prmtopID]
@@ -538,7 +534,7 @@ for dihedral in AllDihes:
 
 # Repeat the above for impropers
 amber_improper_k_unit = unit.kilocalorie_per_mole
-amber_improper_phase_unit = unit.radian
+amber_improper_phase_unit = unit.degree
 improper_dicts = {}
 for dihedral in AllImprs[:500]:
   prmtop = PrmtopLibrary[dihedral.prmtopID]
