@@ -1,8 +1,8 @@
 from openforcefield.topology import Molecule
 from openforcefield.typing.engines.smirnoff import ForceField
 import parmed as ParmEd
-from simtk.openmm import app, unit
-from simtk.openmm import LangevinIntegrator
+from simtk import openmm
+from simtk.openmm import app, unit, XmlSerializer, LangevinIntegrator
 from simtk.openmm.app import NoCutoff, HBonds
 from utils import fix_carboxylate_bond_orders
 import os
@@ -20,30 +20,37 @@ def calc_energy(omm_sys, omm_top, coords):
     omm_simulation = app.Simulation(omm_top, omm_sys, omm_integrator)
     #simulation.context.setPositions(positions)
     omm_simulation.context.setPositions(coords)
-    omm_energy = omm_simulation.context.getState(getEnergy=True).getPotentialEnergy()
-    
+
     for group in omm_idx_to_force.keys():
         omm_energy = omm_simulation.context.getState(getEnergy=True,groups={group}).getPotentialEnergy()
         print(omm_idx_to_force[group], omm_energy)
-
+        
+    omm_energy = omm_simulation.context.getState(getEnergy=True).getPotentialEnergy()
     return omm_energy
 
 
 
 ff = ForceField('test.offxml')
-for folder in ['CTerminal']:#, 'NTerminal', 'MainChain']:
-    prefix = os.path.join('tests', 'issue_2_c_term_charge', folder, 'PRO', 'PRO')
+for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
+    #prefix = os.path.join('tests', 'issue_2_c_term_charge', folder, 'PRO', 'PRO')
+    prefix = os.path.join(folder, 'PRO', 'PRO')
+    print()
+    print()
+    print(prefix)
     # Prepare AMBER system
-    pmd_struct = ParmEd.load_file(prefix + '.prmtop', prefix + '.inpcrd')
-    amber_system = pmd_struct.createSystem(nonbondedMethod=NoCutoff,
+    amber_struct = ParmEd.load_file(prefix + '.prmtop', prefix + '.inpcrd')
+    #print(pmd_struct.atoms)
+    amber_system = amber_struct.createSystem(nonbondedMethod=NoCutoff,
                                            #nonbondedCutoff=9.0*unit.angstrom,
                                            constraints=HBonds,
                                            removeCMMotion=False)
-    amber_top = pmd_struct.topology
+    with open('amb_sys.xml','w') as of:
+        of.write(XmlSerializer.serialize(amber_system))
+    amber_top = amber_struct.topology
 
     amber_energy = calc_energy(amber_system,
                                amber_top,
-                               pmd_struct.positions)
+                               amber_struct.positions)
     print(amber_energy)
                                
     # prepare openff system
@@ -54,16 +61,133 @@ for folder in ['CTerminal']:#, 'NTerminal', 'MainChain']:
     fix_carboxylate_bond_orders(mol)
     print(mol.to_smiles())
     off_top = mol.to_topology()
-    off_sys = ff.create_openmm_system(mol.to_topology())
+    #off_top.box_vectors = [[48, 0, 0], [0, 48, 0], [0, 0, 48]] * unit.angstrom
+    #print('off_box', off_top.box_vectors)
+    #print('amb_box', pmd_struct.box)
+    off_sys = ff.create_openmm_system(mol.to_topology(),)#allow_nonintegral_charges=True)
+    #nonbonded_force = [force for force in off_sys.getForces() if isinstance(force, openmm.NonbondedForce)][0]
+    #nonbonded_force.createExceptionsFromBonds([(bond.atom1.molecule_atom_index,
+    #                                            bond.atom2.molecule_atom_index) for bond in mol.bonds],
+    #                                          )
+    #nonbonded_force.set
+    with open('off_sys.xml','w') as of:
+        of.write(XmlSerializer.serialize(off_sys))
     off_energy = calc_energy(off_sys,
                              off_top,
                              mol.conformers[0])
     print(off_energy)
+    off_struct = ParmEd.openmm.load_topology(off_top.to_openmm(),
+                                             off_sys,
+                                             mol.conformers[0],
+                                             box=amber_struct.box)
     # Calculate energy for openff system
+    #for dihe in off_struct.dihedrals:
+    #    dihe.scee = 1.2
+    #    dihe.scnb = 2.0
+    # Update 1-4 scaling
+    # Fix box usage
+    # Check nonbonded parameters
+    #off_struct.update_dihedral_exclusions()
+    #print(off_struct.atoms)
     
     #from simtk.openmm import XmlSerializer
     #print(XmlSerializer.serialize(sys))
-
+    # Check on bonds
+    for abond in amber_struct.bonds:
+      index_found = 0
+      parms_match = 0
+      nearmatch = (0.0, 0.0, 0)
+      for obond in off_struct.bonds:
+        if (abond.atom1.idx == obond.atom1.idx and abond.atom2.idx == obond.atom2.idx):
+          index_found = 1
+          if (abs(abond.type.k   - obond.type.k  ) < 1.0e-4 and
+              abs(abond.type.req - obond.type.req) < 1.0e-4):
+            parms_match = 1
+          else:
+            nearmatch = (obond.type.k, obond.type.req, 1)
+      if (index_found == 0):
+        print('BOND %4d %4d - %9.5f %9.5f missing in OFF' % (abond.atom1.idx, abond.atom2.idx,
+                                                             abond.type.k, abond.type.req))
+      elif (parms_match == 0):
+        print('BOND %4d %4d - %9.5f %9.5f differs in OFF' % (abond.atom1.idx, abond.atom2.idx,
+                                                             abond.type.k, abond.type.req))
+        if (nearmatch[2] == 1):
+          print('  Nearest match: %9.5f %9.5f' % (nearmatch[0], nearmatch[1]))
+    # Check on angles
+    for aangl in amber_struct.angles:
+      index_found = 0
+      parms_match = 0
+      nearmatch = (0.0, 0.0, 0)
+      for oangl in off_struct.angles:
+        if (aangl.atom1.idx == oangl.atom1.idx and aangl.atom2.idx == oangl.atom2.idx and
+            aangl.atom3.idx == oangl.atom3.idx):
+          index_found = 1
+          if (abs(aangl.type.k      - oangl.type.k     ) < 1.0e-4 and
+              abs(aangl.type.theteq - oangl.type.theteq) < 1.0e-4):
+            parms_match = 1
+          else:
+            nearmatch = (oangl.type.k, oangl.type.theteq, 1)
+      if (index_found == 0):
+        print('ANGL %4d %4d %4d - %9.5f %9.5f missing in OFF' %
+              (aangl.atom1.idx, aangl.atom2.idx, aangl.atom3.idx, aangl.type.k,
+               aangl.type.theteq))
+      elif (parms_match == 0):
+        print('ANGL %4d %4d %4d - %9.5f %9.5f differs in OFF' %
+              (aangl.atom1.idx, aangl.atom2.idx, aangl.atom3.idx, aangl.type.k,
+               aangl.type.theteq))
+        if (nearmatch[2] == 1):
+          print('  Nearest match:      %9.5f %9.5f' % (nearmatch[0], nearmatch[1]))
+          
+    # Check on propers
+    for adihe in amber_struct.dihedrals:
+      #print(adihe.improper)
+      index_found = 0
+      parms_match = 0
+      nearmatch = (0.0, 0.0, 0)
+      for odihe in off_struct.dihedrals:
+        #print(odihe)
+        if (adihe.atom1.idx == odihe.atom1.idx and adihe.atom2.idx == odihe.atom2.idx and
+            adihe.atom3.idx == odihe.atom3.idx and adihe.atom4.idx == odihe.atom4.idx):
+          index_found = 1
+          if (abs(adihe.type.phi_k - odihe.type.phi_k) < 1.0e-4 and
+              abs(adihe.type.phase - odihe.type.phase) < 1.0e-4):# and
+              #adihe.improper == odihe.improper):
+            parms_match = 1
+          else:
+            nearmatch = (odihe.type.phi_k, odihe.type.phase, 1)
+        if (adihe.atom1.idx == odihe.atom4.idx and adihe.atom2.idx == odihe.atom3.idx and
+            adihe.atom3.idx == odihe.atom2.idx and adihe.atom4.idx == odihe.atom1.idx):
+          index_found = 1
+          if (abs(adihe.type.phi_k - odihe.type.phi_k) < 1.0e-4 and
+              abs(adihe.type.phase - odihe.type.phase) < 1.0e-4):# and
+              #adihe.improper == odihe.improper):
+            parms_match = 1
+          else:
+            nearmatch = (odihe.type.phi_k, odihe.type.phase, 1)
+        # Check for impropers
+        aset = {adihe.atom1.idx, adihe.atom2.idx, adihe.atom3.idx, adihe.atom4.idx}
+        oset = {odihe.atom1.idx, odihe.atom2.idx, odihe.atom3.idx, odihe.atom4.idx}
+        #if (adihe.atom1.idx == odihe.atom1.idx and adihe.atom2.idx == odihe.atom3.idx and
+        #    adihe.atom3.idx == odihe.atom2.idx and adihe.atom4.idx == odihe.atom4.idx):
+        if len(aset & oset) == 4:
+          index_found = 1
+          if (abs(adihe.type.phi_k - odihe.type.phi_k) < 1.0e-4 and
+              abs(adihe.type.phase - odihe.type.phase) < 1.0e-4 and
+              adihe.improper == True):
+            parms_match = 1
+          else:
+            nearmatch = (odihe.type.phi_k, odihe.type.phase, 1)
+      #1/0
+      if (index_found == 0):
+        print('DIHE %4d %4d %4d %4d - %9.5f %9.5f missing in OFF' %
+              (adihe.atom1.idx, adihe.atom2.idx, adihe.atom3.idx, adihe.atom4.idx,
+               adihe.type.phi_k, adihe.type.phase))
+      elif (parms_match == 0):
+        print('DIHE %4d %4d %4d %4d - %9.5f %9.5f differs in OFF' %
+              (adihe.atom1.idx, adihe.atom2.idx, adihe.atom3.idx, adihe.atom4.idx,
+               adihe.type.phi_k, adihe.type.phase))
+        if (nearmatch[2] == 1):
+          print('  Nearest match:      %9.5f %9.5f' % (nearmatch[0], nearmatch[1]))
 
 
     
