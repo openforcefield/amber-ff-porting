@@ -559,7 +559,8 @@ for dihedral in AllImprs[:500]:
     new_idx += 1
   dd['smirks'] = smirks
   dd['id'] = parameter_name
-  dd[f'k{new_idx}'] = dihedral.K * amber_improper_k_unit
+  # TODO: Should we divide this by 3, since the SMIRNOFF improper will be applied three times?
+  dd[f'k{new_idx}'] = dihedral.K * amber_improper_k_unit 
   dd[f'phase{new_idx}'] = dihedral.Phase * amber_improper_phase_unit
   dd[f'periodicity{new_idx}'] = dihedral.N
   dd[f'idivf{new_idx}'] = 1

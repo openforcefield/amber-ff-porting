@@ -12,7 +12,7 @@ def calc_energy(omm_sys, omm_top, coords):
     omm_idx_to_force = {}
     for idx, force in enumerate(omm_sys.getForces()):
         force.setForceGroup(idx)
-        omm_idx_to_force[idx] = str(force)
+        omm_idx_to_force[idx] = str(type(force).__name__)
 
     omm_integrator = LangevinIntegrator(300*unit.kelvin, 
                                 1/unit.picosecond, 
@@ -42,7 +42,7 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
     #print(pmd_struct.atoms)
     amber_system = amber_struct.createSystem(nonbondedMethod=NoCutoff,
                                            #nonbondedCutoff=9.0*unit.angstrom,
-                                           constraints=HBonds,
+                                           #constraints=HBonds,
                                            removeCMMotion=False)
     with open('amb_sys.xml','w') as of:
         of.write(XmlSerializer.serialize(amber_system))
@@ -74,11 +74,14 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
         of.write(XmlSerializer.serialize(off_sys))
     off_energy = calc_energy(off_sys,
                              off_top,
-                             mol.conformers[0])
+                             amber_struct.positions,
+                             #mol.conformers[0]
+                             )
     print(off_energy)
     off_struct = ParmEd.openmm.load_topology(off_top.to_openmm(),
                                              off_sys,
-                                             mol.conformers[0],
+                                             amber_struct.positions,
+                                             #mol.conformers[0],
                                              box=amber_struct.box)
     # Calculate energy for openff system
     #for dihe in off_struct.dihedrals:
