@@ -183,6 +183,9 @@ allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID',
 trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
            'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL', 'CYX' ]
 
+allres = ['PRO']
+trmres = ['PRO']
+
 # Main chain, N-terminal, and C-terminal residues
 ResClasses = [ 'MainChain', 'NTerminal', 'CTerminal' ]
 
@@ -598,18 +601,30 @@ for res in UniqueResidues:
     nonbond_dicts.append(nbd)
   #print(smirks, charges)
 
-
-
+### Define a custom sorting method 
+def sort_method(x):
+  # put main chain parameters are above N and C term
+  if 'MainChain' in x['id']:
+    sort_key = 'A'
+  elif 'CTerminal' in x['id']:
+    sort_key = 'B'
+  elif 'NTerminal' in x['id']:
+    sort_key = 'C'
+  # Add a heuristic for "specificness" of a given smarts by looking at the smirks's length
+  #smirks_len_string = str(len(x['smirks'])).zfill(4)
+  smirks_len_string = ''
+  ret_str = smirks_len_string + '_' + sort_key + x['id'] + x['smirks']
+  return ret_str
   
-# Sort the parameters, just for cosmetic reasons
-bond_dicts.sort(key=lambda x: x['id']+x['smirks'])
-angle_dicts.sort(key=lambda x: x['id']+x['smirks'])
+# Sort the parameters, to ensure that specific parameters take precedence over generic ones 
+bond_dicts.sort(key=sort_method)
+angle_dicts.sort(key=sort_method)
 proper_dicts = [val for val in proper_dicts.values()]
-proper_dicts.sort(key=lambda x: x['id']+x['smirks'])
+proper_dicts.sort(key=sort_method)
 improper_dicts = [val for val in improper_dicts.values()]
-improper_dicts.sort(key=lambda x: x['id']+x['smirks'])
-charge_dicts.sort(key=lambda x: x['id']+x['smirks'])
-nonbond_dicts.sort(key=lambda x: x['id']+x['smirks'])
+improper_dicts.sort(key=sort_method)
+charge_dicts.sort(key=sort_method)
+nonbond_dicts.sort(key=sort_method)
 
 
 # Initialize an empty force field
@@ -634,5 +649,7 @@ for smirnoff_tag, param_dicts in { "Bonds": bond_dicts, "Angles": angle_dicts,
   for param_dict in param_dicts:
     handler.add_parameter(param_dict)
 
+# Add the ElectrostaticsHandler, with the proper 1-4 scaling factors
+handler = ff.get_parameter_handler('Electrostatics')                
 # Write the now-populated forcefield out to OFFXML
 ff.to_file('test.offxml')
