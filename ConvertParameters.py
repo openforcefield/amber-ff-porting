@@ -183,8 +183,6 @@ allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID',
 trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
            'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL', 'CYX' ]
 
-allres = ['PRO']
-trmres = ['PRO']
 
 # Main chain, N-terminal, and C-terminal residues
 ResClasses = [ 'MainChain', 'NTerminal', 'CTerminal' ]
@@ -560,7 +558,7 @@ for dihedral in AllImprs[:500]:
   dd['smirks'] = smirks
   dd['id'] = parameter_name
   # TODO: Should we divide this by 3, since the SMIRNOFF improper will be applied three times?
-  dd[f'k{new_idx}'] = dihedral.K * amber_improper_k_unit 
+  dd[f'k{new_idx}'] = dihedral.K * amber_improper_k_unit / 3
   dd[f'phase{new_idx}'] = dihedral.Phase * amber_improper_phase_unit
   dd[f'periodicity{new_idx}'] = dihedral.N
   dd[f'idivf{new_idx}'] = 1
@@ -647,8 +645,13 @@ for smirnoff_tag, param_dicts in { "Bonds": bond_dicts, "Angles": angle_dicts,
   # Loop over the list of parameter dictionaries, using each one as an input to
   # handler.add_parameter.  This mimics deserializing an OFFXML into a ForceField
   # object, and will do any sanitization that we might otherwise miss
+  from openforcefield.typing.engines.smirnoff.parameters import DuplicateParameterError
   for param_dict in param_dicts:
-    handler.add_parameter(param_dict)
+    try:
+      handler.add_parameter(param_dict)
+    except DuplicateParameterError:
+      continue
+      
 
 # Add the ElectrostaticsHandler, with the proper 1-4 scaling factors
 handler = ff.get_parameter_handler('Electrostatics')                
