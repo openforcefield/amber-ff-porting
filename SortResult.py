@@ -1,14 +1,24 @@
 import sys, os
 
 def print_group(D):
+  print('  Type     Amber      OFF      Diff.   Significant?')
   for key in D:
     print(key)
-    flag = '   '
+    flag = '      '
     if (abs(D[key][0] - D[key][4]) > 1.0e-2):
-      flag = '***'
+      flag = '   ***'
     print('  Bond:  %9.4f %9.4f %9.4f %s' % (D[key][0], D[key][4], D[key][0] - D[key][4], flag))
+    flag = '   '
+    if (abs(D[key][1] - D[key][5]) > 1.0e-2):
+      flag = '   ***'
     print('  Angl:  %9.4f %9.4f %9.4f %s' % (D[key][1], D[key][5], D[key][1] - D[key][5], flag))
+    flag = '   '
+    if (abs(D[key][2] - D[key][6]) > 1.0e-2):
+      flag = '   ***'
     print('  Dihe:  %9.4f %9.4f %9.4f %s' % (D[key][2], D[key][6], D[key][2] - D[key][6], flag))
+    flag = '   '
+    if (abs(D[key][3] - D[key][7]) > 1.0e-2):
+      flag = '   ***'
     print('  Nonb:  %9.4f %9.4f %9.4f %s' % (D[key][3], D[key][7], D[key][3] - D[key][7], flag))
 
 fi = open(sys.argv[1], 'r')
@@ -60,9 +70,9 @@ for i, line in enumerate(fmem):
     cterm[tags[1]] = (ambBonds, ambAngls, ambDihes, ambNonbs,
                       offBonds, offAngls, offDihes, offNonbs)
 
-  print('Main Chain')
-  print_group(mainch)
-  print('\nN-Terminal')
-  print_group(nterm)
-  print('\nC-Terminal')
-  print_group(cterm)
+print('Main Chain')
+print_group(mainch)
+print('\nN-Terminal')
+print_group(nterm)
+print('\nC-Terminal')
+print_group(cterm)
