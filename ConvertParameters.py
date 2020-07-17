@@ -54,17 +54,6 @@ class ffDihe:
     self.atom3pos  = -1
     self.atom4pos  = -1
 
-def SnapFloat(x):
-  intx = int(x)
-  if (abs(x - intx) < 1.0e-4):
-    return float(intx)
-  else:
-    intx = int(x * 10.0)
-    if (abs(10.0*x - intx) < 1.0e-4):
-      return float(intx) / 10.0
-    else:
-      return x
-
 def DefineResidue(res, prmtop, topid, rclass):
   ths = ffResidue()
   ths.natom = len(res.atoms)
@@ -88,8 +77,8 @@ def DefineBond(bond, topid):
   ths = ffBond()
   ths.atomType1 = bond.atom1.type
   ths.atomType2 = bond.atom2.type
-  ths.K     = SnapFloat(bond.type.k)
-  ths.Leq   = bond.type.req
+  ths.K     = round(bond.type.k, 4)
+  ths.Leq   = round(bond.type.req, 4)
   ths.prmtopID  = topid
   ths.atom1pos  = bond.atom1.idx
   ths.atom2pos  = bond.atom2.idx
@@ -101,8 +90,8 @@ def DefineAngl(angle, topid):
   ths.atomType1 = angle.atom1.type
   ths.atomType2 = angle.atom2.type
   ths.atomType3 = angle.atom3.type
-  ths.K         = angle.type.k
-  ths.Teq       = angle.type.theteq
+  ths.K         = round(angle.type.k, 4)
+  ths.Teq       = round(angle.type.theteq, 4)
   ths.prmtopID  = topid
   ths.atom1pos  = angle.atom1.idx
   ths.atom2pos  = angle.atom2.idx
@@ -116,12 +105,12 @@ def DefineDihe(dihedral, isimpr, topid):
   ths.atomType2 = dihedral.atom2.type
   ths.atomType3 = dihedral.atom3.type
   ths.atomType4 = dihedral.atom4.type
-  ths.K         = dihedral.type.phi_k
-  ths.Phase     = dihedral.type.phase
+  ths.K         = round(dihedral.type.phi_k, 4)
+  ths.Phase     = round(dihedral.type.phase, 3)
   if (not isimpr):
     ths.N       = dihedral.type.per
-    ths.SCNB    = dihedral.type.scnb
-    ths.SCEE    = dihedral.type.scee
+    ths.SCNB    = round(dihedral.type.scnb, 5)
+    ths.SCEE    = round(dihedral.type.scee, 5)
   ths.prmtopID  = topid
   ths.atom1pos  = dihedral.atom1.idx
   ths.atom2pos  = dihedral.atom2.idx
@@ -182,7 +171,6 @@ allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID',
            'CYX' ]
 trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
            'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL', 'CYX' ]
-
 
 # Main chain, N-terminal, and C-terminal residues
 ResClasses = [ 'MainChain', 'NTerminal', 'CTerminal' ]
@@ -270,8 +258,8 @@ for rclass in ResClasses:
                 bond.atom2.type == unibond.atomType2) or
                (bond.atom2.type == unibond.atomType1 and
                 bond.atom1.type == unibond.atomType2)) and
-              abs(bond.type.k - unibond.K) < 1.0e-6 and
-              abs(bond.type.req - unibond.Leq) < 1.0e-6):
+              abs(round(bond.type.k, 4) - unibond.K) < 1.0e-5 and
+              abs(round(bond.type.req, 4) - unibond.Leq) < 1.0e-5):
             found = True
         if (not found):
           UniqueBonds.append(DefineBond(bond, nprmtop))
@@ -295,8 +283,8 @@ for rclass in ResClasses:
                (angle.atom3.type == uniangl.atomType1 and
                 angle.atom2.type == uniangl.atomType2 and
                 angle.atom1.type == uniangl.atomType3)) and
-              abs(angle.type.k - uniangl.K) < 1.0e-6 and
-              abs(angle.type.theteq - uniangl.Teq) < 1.0e-6):
+              abs(round(angle.type.k, 4) - uniangl.K) < 1.0e-5 and
+              abs(round(angle.type.theteq, 4) - uniangl.Teq) < 1.0e-5):
             found = True
         if (not found):
           UniqueAngls.append(DefineAngl(angle, nprmtop))
@@ -323,8 +311,8 @@ for rclass in ResClasses:
                   dihedral.atom3.type == uniimpr.atomType2 and
                   dihedral.atom2.type == uniimpr.atomType3 and
                   dihedral.atom1.type == uniimpr.atomType4)) and
-                abs(dihedral.type.phi_k - uniimpr.K) < 1.0e-6 and
-                abs(dihedral.type.phase - uniimpr.Phase) < 1.0e-6):
+                abs(round(dihedral.type.phi_k, 4) - uniimpr.K) < 1.0e-5 and
+                abs(round(dihedral.type.phase, 3) - uniimpr.Phase) < 1.0e-4):
               found = True
           if (not found):
             UniqueImprs.append(DefineDihe(dihedral, True, nprmtop))
@@ -353,11 +341,11 @@ for rclass in ResClasses:
                   dihedral.atom3.type == unidihe.atomType2 and
                   dihedral.atom2.type == unidihe.atomType3 and
                   dihedral.atom1.type == unidihe.atomType4)) and
-                abs(dihedral.type.phi_k - unidihe.K) < 1.0e-6 and
+                abs(round(dihedral.type.phi_k, 4) - unidihe.K) < 1.0e-5 and
                 dihedral.type.per == unidihe.N and
-                abs(dihedral.type.phase - unidihe.Phase) < 1.0e-6 and
-                abs(dihedral.type.scnb - unidihe.SCNB) < 1.0e-6 and
-                abs(dihedral.type.scee - unidihe.SCEE) < 1.0e-6):
+                abs(round(dihedral.type.phase, 3) - unidihe.Phase) < 1.0e-4 and
+                abs(round(dihedral.type.scnb, 5) - unidihe.SCNB) < 1.0e-6 and
+                abs(round(dihedral.type.scee, 5) - unidihe.SCEE) < 1.0e-6):
               found = True
           if (not found):
             UniqueDihes.append(DefineDihe(dihedral, False, nprmtop))
@@ -389,8 +377,8 @@ for rclass in ResClasses:
                 improper.atom2.type == uniimpr.atomType2 and
                 improper.atom3.type == uniimpr.atomType3 and
                 improper.atom4.type == uniimpr.atomType4)) and
-              abs(improper.type.psi_k - uniimpr.K) < 1.0e-6 and
-              abs(improper.type.psi_eq - uniimpr.Phase) < 1.0e-6):
+              abs(round(improper.type.psi_k, 4) - uniimpr.K) < 1.0e-5 and
+              abs(round(improper.type.psi_eq, 4) - uniimpr.Phase) < 1.0e-5):
             found = True
         if (not found):
           UniqueImprs.append(DefineDihe(improper, True, nprmtop))
@@ -419,27 +407,27 @@ for item in UniqueResidues:
   print('%4.4s %10.10s (%4d atoms, %6d instances)' % (item.name, item.rclass, item.natom,
         len(ResidueLookup[(item.name, item.rclass)])))
   for atm in item.atoms:
-    print('  %4.4s %4.4s %16.12f %16.12f %16.12f' % (atm.name, atm.type, SnapFloat(atm.charge),
-                                                     SnapFloat(atm.sigma),
-                                                     SnapFloat(atm.epsilon)))
+    print('  %4.4s %4.4s %16.12f %16.12f %16.12f' % (atm.name, atm.type, round(atm.charge, 5),
+                                                     round(atm.sigma, 6),
+                                                     round(atm.epsilon, 6)))
 print('')
 print('Found %d unique bonds.' % len(UniqueBonds))
 for item in UniqueBonds:
-  item.K = SnapFloat(item.K)
+  item.K = round(item.K, 4)
   print('  %4.4s %4.4s %9.5f %9.5f (%6d instances)' % (item.atomType1, item.atomType2, item.K,
                                                        item.Leq,
         len(BondLookup[(item.atomType1, item.atomType2)])))
 print('')
 print('Found %d unique angles.' % len(UniqueAngls))
 for item in UniqueAngls:
-  item.K = SnapFloat(item.K)
+  item.K = round(item.K, 4)
   print('  %4.4s %4.4s %4.4s %9.5f %9.5f (%6d instances)' % (item.atomType1, item.atomType2,
                                                              item.atomType3, item.K, item.Teq,
         len(AnglLookup[(item.atomType1, item.atomType2, item.atomType3)])))
 print('')
 print('Found %d unique dihedrals.' % len(UniqueDihes))
 for item in UniqueDihes:
-  item.Phase = SnapFloat(item.Phase)
+  item.Phase = round(item.Phase, 4)
   print('  %4.4s %4.4s %4.4s %4.4s %9.5f %2d %9.5f %9.5f (%6d instances)' %
         (item.atomType1, item.atomType2, item.atomType3, item.atomType4, item.K, item.N,
          item.Phase, item.SCNB, len(DiheLookup[(item.atomType1, item.atomType2,
@@ -447,7 +435,7 @@ for item in UniqueDihes:
 print('')
 print('Found %d unique impropers.' % len(UniqueImprs))
 for item in UniqueImprs:
-  item.Phase = SnapFloat(item.Phase)
+  item.Phase = round(item.Phase, 4)
   print('  %4.4s %4.4s %4.4s %4.4s %9.5f %9.5f (%6d instances)' %
         (item.atomType1, item.atomType2, item.atomType3, item.atomType4, item.K, item.Phase,
         len(ImprLookup[(item.atomType1, item.atomType2, item.atomType3, item.atomType4)])))

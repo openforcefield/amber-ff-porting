@@ -34,9 +34,14 @@ ff = ForceField('test.offxml')
 for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
     #prefix = os.path.join('tests', 'issue_2_c_term_charge', folder, 'PRO', 'PRO')
     #resnames = ['GLY', 'ALA', 'PHE']
-    resnames = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'HID', 'HIE', 'HIP',
-           'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL',
-           'CYX' ]
+    if (folder == 'MainChain'):
+      resnames = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', # 'HID', 'HIE', 'HIP',
+                   'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', # 'TRP',
+                   'CYX' ]
+    else:
+      resnames = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', # 'HID', 'HIE', 'HIP',
+                   'ILE', 'LEU', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', # 'TRP',
+                   'CYX' ]
 
     for resname in resnames:
         prefix = os.path.join(folder, resname, resname)
@@ -65,7 +70,7 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
         #print(mol.to_smiles())
         from utils import fix_carboxylate_bond_orders
         fix_carboxylate_bond_orders(mol)
-        print(mol.to_smiles())
+        #print(mol.to_smiles())
         off_top = mol.to_topology()
         #off_top.box_vectors = [[48, 0, 0], [0, 48, 0], [0, 0, 48]] * unit.angstrom
         #print('off_box', off_top.box_vectors)
