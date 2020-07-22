@@ -38,11 +38,14 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
       resnames = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', # 'HID', 'HIE', 'HIP',
                    'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', # 'TRP',
                    'CYX' ]
+      #resnames = ['HIP', 'HIE', 'HID', 'GLY']
+      #resnames = ['CYX']#, 'HIE', 'HID']
     else:
       resnames = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', # 'HID', 'HIE', 'HIP',
                    'ILE', 'LEU', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', # 'TRP',
                    'CYX' ]
-
+      #resnames = ['HIP', 'HIE', 'HID', 'GLY']
+      #resnames = ['CYX']
     for resname in resnames:
         prefix = os.path.join(folder, resname, resname)
         print()
@@ -70,7 +73,7 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
         #print(mol.to_smiles())
         from utils import fix_carboxylate_bond_orders
         fix_carboxylate_bond_orders(mol)
-        #print(mol.to_smiles())
+        print(mol.to_smiles())
         off_top = mol.to_topology()
         #off_top.box_vectors = [[48, 0, 0], [0, 48, 0], [0, 0, 48]] * unit.angstrom
         #print('off_box', off_top.box_vectors)
@@ -153,12 +156,18 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
               print('  Nearest match:      %9.5f %9.5f' % (nearmatch[0], nearmatch[1]))
 
         # Check on propers
-        for adihe in amber_struct.dihedrals:
+        #for adihe in amber_struct.dihedrals:
+        n_adihes = len([i for i in amber_struct.dihedrals])
+        n_imp_adihes = len([i for i in amber_struct.dihedrals if i.improper])
+        n_odihes = len([i for i in off_struct.dihedrals])
+        print(f'{n_adihes} amber dihedrals ({n_imp_adihes} impropers) and {n_odihes} off dihedrals')
+        for adihe in off_struct.dihedrals:
           #print(adihe.improper)
           index_found = 0
           parms_match = 0
           nearmatch = (0.0, 0.0, 0)
-          for odihe in off_struct.dihedrals:
+          #for odihe in off_struct.dihedrals:
+          for odihe in amber_struct.dihedrals:
             #print(odihe)
             if (adihe.atom1.idx == odihe.atom1.idx and adihe.atom2.idx == odihe.atom2.idx and
                 adihe.atom3.idx == odihe.atom3.idx and adihe.atom4.idx == odihe.atom4.idx):
@@ -185,9 +194,10 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
             #    adihe.atom3.idx == odihe.atom2.idx and adihe.atom4.idx == odihe.atom4.idx):
             if len(aset & oset) == 4:
               index_found = 1
-              if (abs(adihe.type.phi_k - (odihe.type.phi_k * 3)) < 1.0e-4 and
+              if (abs(adihe.type.phi_k - (odihe.type.phi_k / 3)) < 1.0e-4 and
                   abs(adihe.type.phase - odihe.type.phase) < 1.0e-4 and
-                  adihe.improper == True):
+                  #adihe.improper == True):
+                  odihe.improper == True):
                 parms_match = 1
               else:
                 nearmatch = (odihe.type.phi_k, odihe.type.phase, 1)

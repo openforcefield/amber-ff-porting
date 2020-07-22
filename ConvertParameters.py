@@ -172,6 +172,11 @@ allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID',
 trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
            'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL', 'CYX' ]
 
+#allres = ['CYX'] #, 'HID', 'HIE']
+#allres = ['HIP', 'HID', 'HIE', 'GLY']
+#trmres = ['HIP', 'HID', 'HIE', 'GLY']
+#trmres = ['CYX']
+
 # Main chain, N-terminal, and C-terminal residues
 ResClasses = [ 'MainChain', 'NTerminal', 'CTerminal' ]
 
@@ -494,6 +499,33 @@ for angle in AllAngls:
 amber_proper_k_unit = unit.kilocalorie_per_mole
 amber_proper_phase_unit = unit.degree
 proper_dicts = {}
+
+# Prepare a helper function to determine whether this exact dihedral has
+# already been defined. This is a problem because dihedrals "stack" due
+# to their multiple possible periodicities, so we need to ensure that 
+# we don't stack the same term multiple times
+
+# This method assumes that the terms already have the same SMIRKS,
+# but may be redundant in ALL of their data fields
+def dihedral_term_already_defined(dihe_dict, k, phase, periodicity, idivf):
+  """
+  Returns True if this exact dihedral (periodicity, k, phase, idivf)
+  is already defined under this SMIRKS. This is useful in cases where
+  we might see the same dihedral term multiple times and want to check
+  whether a particular periodicity term is already known and shouldn't
+  be repeated (for example, the two CYX residues in a CYX dimer)
+  """
+  existing_index = 1
+  while f'k{existing_index}' in dihe_dict.keys():
+    if ((dihe_dict[f'k{existing_index}'] == k) and
+        (dihe_dict[f'phase{existing_index}'] == phase) and
+        (dihe_dict[f'periodicity{existing_index}'] == periodicity) and
+        (dihe_dict[f'idivf{existing_index}'] == idivf)):
+      return True
+    existing_index += 1
+  return False
+
+
 for dihedral in AllDihes:
   prmtop = PrmtopLibrary[dihedral.prmtopID]
   prefix = str(prmtop).replace('.prmtop','')
@@ -510,6 +542,12 @@ for dihedral in AllDihes:
   # idivfX values for X={1..4} (matching the k's)
   lookup_key = (smirks, parameter_name)
   dd = proper_dicts.get(lookup_key, dict())
+  if dihedral_term_already_defined(dd,
+                                   dihedral.K * amber_proper_k_unit,
+                                   dihedral.Phase * amber_proper_phase_unit,
+                                   dihedral.N,
+                                   1):
+    continue
   new_idx = 1
   while f'k{new_idx}' in dd.keys():
     new_idx += 1
@@ -525,7 +563,7 @@ for dihedral in AllDihes:
 amber_improper_k_unit = unit.kilocalorie_per_mole
 amber_improper_phase_unit = unit.degree
 improper_dicts = {}
-for dihedral in AllImprs[:500]:
+for dihedral in AllImprs:
   prmtop = PrmtopLibrary[dihedral.prmtopID]
   prefix = str(prmtop).replace('.prmtop','')
   resnames = prefix.split('/')[-1]
@@ -540,6 +578,12 @@ for dihedral in AllImprs[:500]:
                                dihedral.atom2pos, dihedral.atom4pos))
   lookup_key = (smirks, parameter_name)
   dd = improper_dicts.get(lookup_key, dict())
+  if dihedral_term_already_defined(dd,
+                                   dihedral.K * amber_proper_k_unit,
+                                   dihedral.Phase * amber_proper_phase_unit,
+                                   dihedral.N,
+                                   1):
+    continue
   new_idx = 1
   while f'k{new_idx}' in dd.keys():
     new_idx += 1
