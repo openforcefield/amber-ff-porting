@@ -111,6 +111,8 @@ def DefineDihe(dihedral, isimpr, topid):
     ths.N       = dihedral.type.per
     ths.SCNB    = round(dihedral.type.scnb, 5)
     ths.SCEE    = round(dihedral.type.scee, 5)
+  else:
+    ths.N       = 2
   ths.prmtopID  = topid
   ths.atom1pos  = dihedral.atom1.idx
   ths.atom2pos  = dihedral.atom2.idx
@@ -172,10 +174,10 @@ allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID',
 trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
            'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL', 'CYX' ]
 
-#allres = ['CYX'] #, 'HID', 'HIE']
+#allres = ['GLU'] #, 'HID', 'HIE']
 #allres = ['HIP', 'HID', 'HIE', 'GLY']
 #trmres = ['HIP', 'HID', 'HIE', 'GLY']
-#trmres = ['CYX']
+#trmres = ['GLU']
 
 # Main chain, N-terminal, and C-terminal residues
 ResClasses = [ 'MainChain', 'NTerminal', 'CTerminal' ]
