@@ -174,10 +174,10 @@ allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID',
 trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
            'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL', 'CYX' ]
 
-#allres = ['GLU'] #, 'HID', 'HIE']
+#allres = ['ARG'] #, 'HID', 'HIE']
 #allres = ['HIP', 'HID', 'HIE', 'GLY']
 #trmres = ['HIP', 'HID', 'HIE', 'GLY']
-#trmres = ['GLU']
+#trmres = ['ARG']
 
 # Main chain, N-terminal, and C-terminal residues
 ResClasses = [ 'MainChain', 'NTerminal', 'CTerminal' ]
@@ -578,6 +578,8 @@ for dihedral in AllImprs:
   # is central.
   smirks = get_smarts(prefix, (dihedral.atom1pos, dihedral.atom3pos,
                                dihedral.atom2pos, dihedral.atom4pos))
+  #smirks = get_smarts(prefix, (dihedral.atom1pos, dihedral.atom2pos,
+  #                             dihedral.atom3pos, dihedral.atom4pos))
   lookup_key = (smirks, parameter_name)
   dd = improper_dicts.get(lookup_key, dict())
   if dihedral_term_already_defined(dd,
@@ -592,7 +594,7 @@ for dihedral in AllImprs:
   dd['smirks'] = smirks
   dd['id'] = parameter_name
   # TODO: Should we divide this by 3, since the SMIRNOFF improper will be applied three times?
-  dd[f'k{new_idx}'] = dihedral.K * amber_improper_k_unit / 3
+  dd[f'k{new_idx}'] = dihedral.K * amber_improper_k_unit #/ 3
   dd[f'phase{new_idx}'] = dihedral.Phase * amber_improper_phase_unit
   dd[f'periodicity{new_idx}'] = dihedral.N
   dd[f'idivf{new_idx}'] = 1
