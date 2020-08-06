@@ -7,6 +7,7 @@ from simtk.openmm.app import NoCutoff, HBonds
 from utils import fix_carboxylate_bond_orders
 import os
 
+from amberimpropertorsionhandler import AmberImproperTorsionHandler
 
 def calc_energy(omm_sys, omm_top, coords):
     omm_idx_to_force = {}
@@ -42,13 +43,13 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
                    'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',
                    'CYX' ]
       #resnames = ['HIP', 'HIE', 'HID', 'GLY']
-      #resnames = ['ARG']#, 'HIE', 'HID']
+      #resnames = ['GLU']#, 'HIE', 'HID']
     else:
       resnames = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
                    'ILE', 'LEU', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',
                    'CYX' ]
       #resnames = ['HIP', 'HIE', 'HID', 'GLY']
-      #resnames = ['ARG']
+      #resnames = ['GLU']
     for resname in resnames:
         prefix = os.path.join(folder, resname, resname)
         print()

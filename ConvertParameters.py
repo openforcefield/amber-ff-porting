@@ -5,6 +5,8 @@ from openforcefield.topology import Molecule
 from simtk import unit
 from utils import fix_carboxylate_bond_orders
 
+from amberimpropertorsionhandler import AmberImproperTorsionHandler
+
 
 def props(cls):
   return [ i for i in cls.__dict__.keys() if i[:1] != '_' ]
@@ -174,10 +176,10 @@ allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID',
 trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
            'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL', 'CYX' ]
 
-#allres = ['ARG'] #, 'HID', 'HIE']
+#allres = ['GLU'] #, 'HID', 'HIE']
 #allres = ['HIP', 'HID', 'HIE', 'GLY']
 #trmres = ['HIP', 'HID', 'HIE', 'GLY']
-#trmres = ['ARG']
+#trmres = ['GLU']
 
 # Main chain, N-terminal, and C-terminal residues
 ResClasses = [ 'MainChain', 'NTerminal', 'CTerminal' ]
@@ -576,10 +578,10 @@ for dihedral in AllImprs:
   # It's important to note that the 2- and 3- position atom indices are switched below. In
   # AMBER, the 3-position atom is central in the improper.  In SMIRNOFF, the 2-position atom
   # is central.
-  smirks = get_smarts(prefix, (dihedral.atom1pos, dihedral.atom3pos,
-                               dihedral.atom2pos, dihedral.atom4pos))
-  #smirks = get_smarts(prefix, (dihedral.atom1pos, dihedral.atom2pos,
-  #                             dihedral.atom3pos, dihedral.atom4pos))
+  #smirks = get_smarts(prefix, (dihedral.atom1pos, dihedral.atom3pos,
+  #                             dihedral.atom2pos, dihedral.atom4pos))
+  smirks = get_smarts(prefix, (dihedral.atom1pos, dihedral.atom2pos,
+                               dihedral.atom3pos, dihedral.atom4pos))
   lookup_key = (smirks, parameter_name)
   dd = improper_dicts.get(lookup_key, dict())
   if dihedral_term_already_defined(dd,
@@ -670,7 +672,7 @@ ff._set_aromaticity_model('OEAroModel_MDL')
 # Loop over the parameters to convert and their corresponding SMIRNOFF header tags 
 for smirnoff_tag, param_dicts in { "Bonds": bond_dicts, "Angles": angle_dicts,
                                    "ProperTorsions": proper_dicts,
-                                   "ImproperTorsions": improper_dicts,
+                                   "AmberImproperTorsions": improper_dicts,
                                    'LibraryCharges': charge_dicts,
                                    'vdW': nonbond_dicts}.items():
   # Get the parameter handler for the given tag. The
