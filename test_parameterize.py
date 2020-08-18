@@ -7,6 +7,7 @@ from simtk.openmm.app import NoCutoff, HBonds
 from utils import fix_carboxylate_bond_orders
 import os
 
+from amberimpropertorsionhandler import AmberImproperTorsionHandler
 
 def calc_energy(omm_sys, omm_top, coords):
     omm_idx_to_force = {}
@@ -29,23 +30,26 @@ def calc_energy(omm_sys, omm_top, coords):
     return omm_energy
 
 
-
+#from openforcefield.typing.engines.smirnoff import ImproperTorsionHandler
+#ImproperTorsionHandler.ImproperTorsionType._VALENCE_TYPE = None
 ff = ForceField('test.offxml')
+#ff.get_parameter_handler('ImproperTorsions')._INFOTYPE._VALENCE_TYPE = None
+
 for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
     #prefix = os.path.join('tests', 'issue_2_c_term_charge', folder, 'PRO', 'PRO')
     #resnames = ['GLY', 'ALA', 'PHE']
     if (folder == 'MainChain'):
-      resnames = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', # 'HID', 'HIE', 'HIP',
-                   'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', # 'TRP',
+      resnames = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY',  'HID', 'HIE', 'HIP',
+                   'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',
                    'CYX' ]
       #resnames = ['HIP', 'HIE', 'HID', 'GLY']
-      #resnames = ['CYX']#, 'HIE', 'HID']
+      #resnames = ['GLU']#, 'HIE', 'HID']
     else:
-      resnames = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', # 'HID', 'HIE', 'HIP',
-                   'ILE', 'LEU', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', # 'TRP',
+      resnames = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
+                   'ILE', 'LEU', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',
                    'CYX' ]
       #resnames = ['HIP', 'HIE', 'HID', 'GLY']
-      #resnames = ['CYX']
+      #resnames = ['GLU']
     for resname in resnames:
         prefix = os.path.join(folder, resname, resname)
         print()
@@ -194,7 +198,11 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
             #    adihe.atom3.idx == odihe.atom2.idx and adihe.atom4.idx == odihe.atom4.idx):
             if len(aset & oset) == 4:
               index_found = 1
-              if (abs(adihe.type.phi_k - (odihe.type.phi_k / 3)) < 1.0e-4 and
+              #if (abs(adihe.type.phi_k - (odihe.type.phi_k / 3)) < 1.0e-4 and
+              #    abs(adihe.type.phase - odihe.type.phase) < 1.0e-4 and
+              #    #adihe.improper == True):
+              #    odihe.improper == True):
+              if (abs(adihe.type.phi_k - (odihe.type.phi_k)) < 1.0e-4 and
                   abs(adihe.type.phase - odihe.type.phase) < 1.0e-4 and
                   #adihe.improper == True):
                   odihe.improper == True):

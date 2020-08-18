@@ -5,6 +5,8 @@ from openforcefield.topology import Molecule
 from simtk import unit
 from utils import fix_carboxylate_bond_orders
 
+from amberimpropertorsionhandler import AmberImproperTorsionHandler
+
 
 def props(cls):
   return [ i for i in cls.__dict__.keys() if i[:1] != '_' ]
@@ -111,6 +113,8 @@ def DefineDihe(dihedral, isimpr, topid):
     ths.N       = dihedral.type.per
     ths.SCNB    = round(dihedral.type.scnb, 5)
     ths.SCEE    = round(dihedral.type.scee, 5)
+  else:
+    ths.N       = 2
   ths.prmtopID  = topid
   ths.atom1pos  = dihedral.atom1.idx
   ths.atom2pos  = dihedral.atom2.idx
@@ -172,10 +176,10 @@ allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID',
 trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
            'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL', 'CYX' ]
 
-#allres = ['CYX'] #, 'HID', 'HIE']
+#allres = ['GLU'] #, 'HID', 'HIE']
 #allres = ['HIP', 'HID', 'HIE', 'GLY']
 #trmres = ['HIP', 'HID', 'HIE', 'GLY']
-#trmres = ['CYX']
+#trmres = ['GLU']
 
 # Main chain, N-terminal, and C-terminal residues
 ResClasses = [ 'MainChain', 'NTerminal', 'CTerminal' ]
@@ -574,8 +578,10 @@ for dihedral in AllImprs:
   # It's important to note that the 2- and 3- position atom indices are switched below. In
   # AMBER, the 3-position atom is central in the improper.  In SMIRNOFF, the 2-position atom
   # is central.
-  smirks = get_smarts(prefix, (dihedral.atom1pos, dihedral.atom3pos,
-                               dihedral.atom2pos, dihedral.atom4pos))
+  #smirks = get_smarts(prefix, (dihedral.atom1pos, dihedral.atom3pos,
+  #                             dihedral.atom2pos, dihedral.atom4pos))
+  smirks = get_smarts(prefix, (dihedral.atom1pos, dihedral.atom2pos,
+                               dihedral.atom3pos, dihedral.atom4pos))
   lookup_key = (smirks, parameter_name)
   dd = improper_dicts.get(lookup_key, dict())
   if dihedral_term_already_defined(dd,
@@ -590,7 +596,7 @@ for dihedral in AllImprs:
   dd['smirks'] = smirks
   dd['id'] = parameter_name
   # TODO: Should we divide this by 3, since the SMIRNOFF improper will be applied three times?
-  dd[f'k{new_idx}'] = dihedral.K * amber_improper_k_unit / 3
+  dd[f'k{new_idx}'] = dihedral.K * amber_improper_k_unit #/ 3
   dd[f'phase{new_idx}'] = dihedral.Phase * amber_improper_phase_unit
   dd[f'periodicity{new_idx}'] = dihedral.N
   dd[f'idivf{new_idx}'] = 1
@@ -666,7 +672,7 @@ ff._set_aromaticity_model('OEAroModel_MDL')
 # Loop over the parameters to convert and their corresponding SMIRNOFF header tags 
 for smirnoff_tag, param_dicts in { "Bonds": bond_dicts, "Angles": angle_dicts,
                                    "ProperTorsions": proper_dicts,
-                                   "ImproperTorsions": improper_dicts,
+                                   "AmberImproperTorsions": improper_dicts,
                                    'LibraryCharges': charge_dicts,
                                    'vdW': nonbond_dicts}.items():
   # Get the parameter handler for the given tag. The
