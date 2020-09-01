@@ -55,7 +55,7 @@ for RESA in ${ALLRES} ; do
     echo "saveAmberParm x ${RESA}_${RESB}.prmtop ${RESA}_${RESB}.inpcrd" >> tleap.in
     echo "quit" >> tleap.in
     tleap -f tleap.in > tleap.out
-    sander -O -i ../../min.in -o min.out -p ${RESA}_${RESB}.prmtop -c ${RESA}_${RESB}.inpcrd \
+    pmemd -O -i ../../min.in -o min.out -p ${RESA}_${RESB}.prmtop -c ${RESA}_${RESB}.inpcrd \
           -r mincrd
     mv mincrd ${RESA}_${RESB}.inpcrd
     ambpdb -p ${RESA}_${RESB}.prmtop < ${RESA}_${RESB}.inpcrd > ${RESA}_${RESB}.pdb
@@ -105,7 +105,7 @@ for RESA in ${TRMRES} ; do
     echo "saveAmberParm x ${RESA}_${RESB}.prmtop ${RESA}_${RESB}.inpcrd" >> tleap.in
     echo "quit" >> tleap.in
     tleap -f tleap.in > tleap.out
-    sander -O -i ../../min.in -o min.out -p ${RESA}_${RESB}.prmtop -c ${RESA}_${RESB}.inpcrd \
+    pmemd -O -i ../../min.in -o min.out -p ${RESA}_${RESB}.prmtop -c ${RESA}_${RESB}.inpcrd \
           -r mincrd
     mv mincrd ${RESA}_${RESB}.inpcrd
     ambpdb -p ${RESA}_${RESB}.prmtop < ${RESA}_${RESB}.inpcrd > ${RESA}_${RESB}.pdb
@@ -155,7 +155,7 @@ for RESA in ${ALLRES} ; do
     echo "saveAmberParm x ${RESA}_${RESB}.prmtop ${RESA}_${RESB}.inpcrd" >> tleap.in
     echo "quit" >> tleap.in
     tleap -f tleap.in > tleap.out
-    sander -O -i ../../min.in -o min.out -p ${RESA}_${RESB}.prmtop -c ${RESA}_${RESB}.inpcrd \
+    pmemd -O -i ../../min.in -o min.out -p ${RESA}_${RESB}.prmtop -c ${RESA}_${RESB}.inpcrd \
           -r mincrd
     mv mincrd ${RESA}_${RESB}.inpcrd
     ambpdb -p ${RESA}_${RESB}.prmtop < ${RESA}_${RESB}.inpcrd > ${RESA}_${RESB}.pdb
