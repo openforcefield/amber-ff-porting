@@ -172,9 +172,9 @@ def get_smarts(prefix, atom_idxs):
 # Lists of residues that can occur at various positions on the tripeptide
 allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
            'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL',
-           'CYX' ]
+           'CYS', 'CYX' ]
 trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
-           'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL', 'CYX' ]
+           'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL', 'CYS', 'CYX' ]
 
 #allres = ['GLU'] #, 'HID', 'HIE']
 #allres = ['HIP', 'HID', 'HIE', 'GLY']
@@ -647,6 +647,12 @@ def sort_method(x):
     sort_key = 'B'
   elif 'NTerminal' in x['id']:
     sort_key = 'C'
+    
+  # Ensure that CYS parameters are not partially overridden by CYX
+  if 'CYX' in x['id']:
+    sort_key += 'A'
+  else:
+    sort_key += 'B'
   # Add a heuristic for "specificness" of a given smarts by looking at the smirks's length
   #smirks_len_string = str(len(x['smirks'])).zfill(4)
   smirks_len_string = ''
