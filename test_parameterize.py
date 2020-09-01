@@ -41,15 +41,15 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
     if (folder == 'MainChain'):
       resnames = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY',  'HID', 'HIE', 'HIP',
                    'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',
-                   'CYX' ]
+                   'CYX', 'CYS']
       #resnames = ['HIP', 'HIE', 'HID', 'GLY']
-      #resnames = ['GLU']#, 'HIE', 'HID']
+      #resnames = ['CYS', 'CYX']#, 'HIE', 'HID']
     else:
       resnames = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
                    'ILE', 'LEU', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',
-                   'CYX' ]
+                   'CYX', 'CYS' ]
       #resnames = ['HIP', 'HIE', 'HID', 'GLY']
-      #resnames = ['GLU']
+      #resnames = ['CYS', 'CYX']
     for resname in resnames:
         prefix = os.path.join(folder, resname, resname)
         print()
