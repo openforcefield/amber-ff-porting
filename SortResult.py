@@ -5,19 +5,19 @@ def print_group(D):
   for key in D:
     print(key)
     flag = '      '
-    if (abs(D[key][0] - D[key][4]) > 1.0e-2):
+    if (abs(D[key][0] - D[key][4]) > 5.0e-3):
       flag = '   ***'
     print('  Bond:  %9.4f %9.4f %9.4f %s' % (D[key][0], D[key][4], D[key][0] - D[key][4], flag))
     flag = '   '
-    if (abs(D[key][1] - D[key][5]) > 1.0e-2):
+    if (abs(D[key][1] - D[key][5]) > 5.0e-3):
       flag = '   ***'
     print('  Angl:  %9.4f %9.4f %9.4f %s' % (D[key][1], D[key][5], D[key][1] - D[key][5], flag))
     flag = '   '
-    if (abs(D[key][2] - D[key][6]) > 1.0e-2):
+    if (abs(D[key][2] - D[key][6]) > 5.0e-3):
       flag = '   ***'
     print('  Dihe:  %9.4f %9.4f %9.4f %s' % (D[key][2], D[key][6], D[key][2] - D[key][6], flag))
     flag = '   '
-    if (abs(D[key][3] - D[key][7]) > 1.0e-2):
+    if (abs(D[key][3] - D[key][7]) > 5.0e-3):
       flag = '   ***'
     print('  Nonb:  %9.4f %9.4f %9.4f %s' % (D[key][3], D[key][7], D[key][3] - D[key][7], flag))
 
@@ -36,7 +36,7 @@ for i, line in enumerate(fmem):
   ambAngls = 0.0
   ambDihes = 0.0
   ambNonbs = 0.0
-  for j in range(1, 5):
+  for j in range(1, 6):
     ttl = fmem[i+j].split()
     if (ttl[0] == 'HarmonicBondForce'):
       ambBonds = float(ttl[1])
@@ -50,7 +50,7 @@ for i, line in enumerate(fmem):
   offAngls = 0.0
   offDihes = 0.0
   offNonbs = 0.0
-  for j in range(6, 10):
+  for j in range(6, 11):
     ttl = fmem[i+j].split()
     if (ttl[0] == 'HarmonicBondForce'):
       offBonds = float(ttl[1])
