@@ -123,12 +123,39 @@ def DefineDihe(dihedral, isimpr, topid):
 
   return ths
 
+
+def remove_charge_and_bond_order_from_guanidinium(offmol):
+  """
+  To correct for chemical perception issues with possible resonance states of arginine, 
+  remove all charge from the guanidinium group, and set all bond orders to 4. This will
+  mark the resonant bonds with a unique "$" character in the SMARTS, which we can later 
+  replace. 
+  """
+  for atom in offmol.atoms:
+    if atom.element.symbol != "C":
+      continue
+    nitrogen_neighbors = 0
+    for neighbor in atom.bonded_atoms:
+      if neighbor.element.symbol == "N":
+        nitrogen_neighbors += 1
+    if nitrogen_neighbors != 3:
+      continue
+    atom.formal_charge = 0
+    for neighbor in atom.bonded_atoms:
+      neighbor.formal_charge = 0
+    for bond in atom.bonds:
+      # Set bond order 4, which will produce a "$" character. We later replace this with "~".
+      bond.bond_order = 4
+    
+        
+
 prefix2pmd_struct = {}
 def get_smarts(prefix, atom_idxs):
   """Get the SMARTS corresponding to a list of atom indices"""
 
   offmol = Molecule.from_file(prefix + '.mol2')
   fix_carboxylate_bond_orders(offmol)
+  remove_charge_and_bond_order_from_guanidinium(offmol)
   if prefix in prefix2pmd_struct:
     pmd_struct = prefix2pmd_struct[prefix]
   else:    
@@ -155,9 +182,9 @@ def get_smarts(prefix, atom_idxs):
   subsetmol = OEChem.OEGraphMol()
   oepred = OEChem.PyAtomPredicate(lambda x:x.GetIdx() in atom_indices_of_interest)
   OEChem.OESubsetMol(subsetmol, oemol, oepred)
+  #OEAssignAromaticFlags(subsetmol, 
   smiles_options = (OEChem.OESMILESFlag_Canonical | OEChem.OESMILESFlag_Isotopes |
                     OEChem.OESMILESFlag_RGroups)
-
   # Add the atom and bond stereo flags
   smiles_options |= OEChem.OESMILESFlag_AtomStereo | OEChem.OESMILESFlag_BondStereo
 
@@ -166,6 +193,8 @@ def get_smarts(prefix, atom_idxs):
   smiles_options |= OEChem.OESMILESFlag_AtomMaps
   smiles = OEChem.OECreateSmiString(subsetmol, smiles_options)
 
+  # Replace "$" characters (bond order 4) with "~" (wildcard bond)
+  smiles = smiles.replace('$', '~')
   return smiles
 
 
@@ -176,10 +205,10 @@ allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID',
 trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
            'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL', 'CYS', 'CYX' ]
 
-#allres = ['GLU'] #, 'HID', 'HIE']
+#allres = ['ARG'] #, 'HID', 'HIE']
 #allres = ['HIP', 'HID', 'HIE', 'GLY']
 #trmres = ['HIP', 'HID', 'HIE', 'GLY']
-#trmres = ['GLU']
+#trmres = ['ARG']
 
 # Main chain, N-terminal, and C-terminal residues
 ResClasses = [ 'MainChain', 'NTerminal', 'CTerminal' ]
