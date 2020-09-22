@@ -154,27 +154,11 @@ def remove_charge_and_bond_order_from_imidazole(offmol):
   mark the resonant bonds with a unique "$" character in the SMARTS, which we can later 
   replace. 
   """
-  #print(offmol.to_smiles())
   matches = offmol.chemical_environment_matches('[C:1]1~[C:2]~[N:3]~[C:4]~[N:5]1')
   all_imidazole_atoms = set()
   for match in matches:
     for idx in match:
       all_imidazole_atoms.add(idx)
-  #print(all_imidazole_atoms)
-  #1/0
-  # nx_mol = offmol.to_networkx()
-  # def node_match_func(x, y):
-  #   # always match by atleast atomic number
-  #   is_equal = x["atomic_number"] == y["atomic_number"]
-  #   if aromatic_matching:
-  #     is_equal &= x["is_aromatic"] == y["is_aromatic"]
-  #   if formal_charge_matching:
-  #     is_equal &= x["formal_charge"] == y["formal_charge"]
-  #   return is_equal
-  
-  # GM = GraphMatcher(
-  #   mol1_netx, mol2_netx, node_match=node_match_func
-  #   )
 
   for atom in offmol.atoms:
     if atom.molecule_atom_index in all_imidazole_atoms:
@@ -185,21 +169,6 @@ def remove_charge_and_bond_order_from_imidazole(offmol):
         (bond.atom2_index in all_imidazole_atoms)):
       bond.bond_order = 4
       
-    # if atom.element.symbol != "C":
-    #   continue
-    # nitrogen_neighbors = 0
-    # for neighbor in atom.bonded_atoms:
-    #   if neighbor.element.symbol == "N":
-    #     nitrogen_neighbors += 1
-    # if nitrogen_neighbors != 3:
-    #   continue
-    # atom.formal_charge = 0
-    # for neighbor in atom.bonded_atoms:
-    #   neighbor.formal_charge = 0
-    # for bond in atom.bonds:
-    #   # Set bond order 4, which will produce a "$" character. We later replace this with "~".
-    #   bond.bond_order = 4
-        
 
 prefix2pmd_struct = {}
 def get_smarts(prefix, atom_idxs):
