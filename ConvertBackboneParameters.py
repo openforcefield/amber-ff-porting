@@ -159,6 +159,14 @@ def get_smarts(prefix, atom_idxs):
       atom_indices_of_interest.add(atom_idx)
       for neighbor in oeatom.GetAtoms():
         atom_indices_of_interest.add(neighbor.GetIdx())
+        # Patch to catch N-terminal residue backbone parameters, otherwise
+        # terminal atom backbone torsion gets thrown out since it doesn't
+        # include any atoms in the next residue. 
+        for neighbor2 in neighbor.GetAtoms():
+          if ('NTerminal' in prefix and
+              neighbor2.GetFormalCharge() == 1 and
+              neighbor2.IsNitrogen()):
+            atom_indices_of_interest.add(neighbor2.GetIdx())
 
   # Make a "Subset" molecule, so that we don't get weird charges
   # around where we cleave the residues
@@ -186,10 +194,10 @@ allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID',
            'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL',
            'CYS']
            #'CYX' ]
-#trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
-#           'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL', 'CYX' ]
+trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
+           'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL'] #, 'CYX' ]
 
-trmres = []
+#trmres = []
 #allres = ['ALA'] #, 'HID', 'HIE']
 #allres = ['HIP', 'HID', 'HIE', 'GLY']
 #trmres = ['HIP', 'HID', 'HIE', 'GLY']

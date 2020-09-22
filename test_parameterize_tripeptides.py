@@ -9,6 +9,7 @@ import os
 import itertools
 
 from amberimpropertorsionhandler import AmberImproperTorsionHandler
+from malformed_tripeptides import malformed_tripeptides
 
 def calc_energy(omm_sys, omm_top, coords):
     omm_idx_to_force = {}
@@ -44,17 +45,18 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
       #             'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',]
                    #'CYX' ]
       #resnames = ['HIP', 'HIE', 'HID', 'GLY']
-      resnames = ['ALA', 'GLY', 'PRO', 'CYS']#, 'HIE', 'HID']
+      #resnames = ['ALA', 'GLY', 'PRO', 'CYS']#, 'HIE', 'HID']
+        resnames = []
     else:
       #resnames = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
       #             'ILE', 'LEU', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',
       #             'CYX' ]
-      #resnames = ['HIP', 'HIE', 'HID', 'GLY']
-      resnames = []
+      resnames = ['MET', 'ALA'] #, 'HID', 'GLY']
+      #resnames = []
     for resa, resb in itertools.permutations(resnames, 2):
-      if (folder, (resa, resb)) in malformed_tripeptides:
-        print(f'Skipping {folder}/{resa}_{resb} because it is known to be mis-formatted')
-        continue
+        if (folder, (resa, resb)) in malformed_tripeptides:
+            print(f'Skipping {folder}/{resa}_{resb} because it is known to be mis-formatted')
+            continue
         
         resname = f'{resa}_{resb}'
         prefix = os.path.join(folder, resname, resname)
