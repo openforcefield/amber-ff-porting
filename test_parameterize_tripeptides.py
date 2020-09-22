@@ -52,6 +52,9 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
       #resnames = ['HIP', 'HIE', 'HID', 'GLY']
       resnames = []
     for resa, resb in itertools.permutations(resnames, 2):
+      if (folder, (resa, resb)) in malformed_tripeptides:
+        print(f'Skipping {folder}/{resa}_{resb} because it is known to be mis-formatted')
+        continue
         
         resname = f'{resa}_{resb}'
         prefix = os.path.join(folder, resname, resname)

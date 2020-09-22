@@ -7,7 +7,7 @@ from utils import fix_carboxylate_bond_orders
 import itertools
 
 from amberimpropertorsionhandler import AmberImproperTorsionHandler
-
+from malformed_tripeptides import malformed_tripeptides
 
 def props(cls):
   return [ i for i in cls.__dict__.keys() if i[:1] != '_' ]
@@ -179,6 +179,8 @@ def get_smarts(prefix, atom_idxs):
   return smiles
 
 
+
+
 # Lists of residues that can occur at various positions on the tripeptide
 allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
            'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL',
@@ -242,6 +244,9 @@ for rclass in ResClasses:
   # Loop over all residue combinations
   for resa in arange:
     for resb in arange:
+      if (rclass, (resa, resb)) in malformed_tripeptides:
+        print(f'Skipping {rclass}/{resa}_{resb} because it is known to be mis-formatted')
+        continue
       ppsys = f'{resa}_{resb}'
       topname  = os.path.join(rclass, ppsys, ppsys + '.prmtop')
       mol2name = os.path.join(rclass, ppsys, ppsys + '.mol2')
