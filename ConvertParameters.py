@@ -147,7 +147,28 @@ def remove_charge_and_bond_order_from_guanidinium(offmol):
       # Set bond order 4, which will produce a "$" character. We later replace this with "~".
       bond.bond_order = 4
     
-        
+def remove_charge_and_bond_order_from_imidazole(offmol):
+  """
+  To correct for chemical perception issues with possible resonance states of histidine, 
+  remove all charge from the imidazole group, and set all bond orders to 4. This will
+  mark the resonant bonds with a unique "$" character in the SMARTS, which we can later 
+  replace. 
+  """
+  matches = offmol.chemical_environment_matches('[C:1]1~[C:2]~[N:3]~[C:4]~[N:5]1')
+  all_imidazole_atoms = set()
+  for match in matches:
+    for idx in match:
+      all_imidazole_atoms.add(idx)
+
+  for atom in offmol.atoms:
+    if atom.molecule_atom_index in all_imidazole_atoms:
+      atom.formal_charge = 0
+      
+  for bond in offmol.bonds:
+    if ((bond.atom1_index in all_imidazole_atoms) and
+        (bond.atom2_index in all_imidazole_atoms)):
+      bond.bond_order = 4
+      
 
 prefix2pmd_struct = {}
 def get_smarts(prefix, atom_idxs):
@@ -156,6 +177,7 @@ def get_smarts(prefix, atom_idxs):
   offmol = Molecule.from_file(prefix + '.mol2')
   fix_carboxylate_bond_orders(offmol)
   remove_charge_and_bond_order_from_guanidinium(offmol)
+  remove_charge_and_bond_order_from_imidazole(offmol)
   if prefix in prefix2pmd_struct:
     pmd_struct = prefix2pmd_struct[prefix]
   else:    
@@ -680,6 +702,9 @@ def sort_method(x):
   # Ensure that CYS parameters are not partially overridden by CYX
   if 'CYX' in x['id']:
     sort_key += 'A'
+  # Because HID and HIE are substructures of HIP, make sure HIP comes LAST
+  elif 'HIP' in x['id']:
+    sort_key += 'Z'
   else:
     sort_key += 'B'
   # Add a heuristic for "specificness" of a given smarts by looking at the smirks's length

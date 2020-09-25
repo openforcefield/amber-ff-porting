@@ -41,17 +41,17 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
     #prefix = os.path.join('tests', 'issue_2_c_term_charge', folder, 'PRO', 'PRO')
     #resnames = ['GLY', 'ALA', 'PHE']
     if (folder == 'MainChain'):
-      #resnames = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY',  'HID', 'HIE', 'HIP',
-      #             'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',]
+      resnames = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY',  'HID', 'HIE', 'HIP',
+                   'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',]
                    #'CYX' ]
       #resnames = ['HIP', 'HIE', 'HID', 'GLY']
       #resnames = ['ALA', 'GLY', 'PRO', 'CYS']#, 'HIE', 'HID']
-        resnames = []
+
     else:
-      #resnames = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
-      #             'ILE', 'LEU', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',
-      #             'CYX' ]
-      resnames = ['MET', 'ALA'] #, 'HID', 'GLY']
+      resnames = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
+                   'ILE', 'LEU', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',
+                   'CYX' ]
+      #resnames = ['HIP', 'HIE', 'HID', 'GLY']
       #resnames = []
     for resa, resb in itertools.permutations(resnames, 2):
         if (folder, (resa, resb)) in malformed_tripeptides:
@@ -90,7 +90,11 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
         #off_top.box_vectors = [[48, 0, 0], [0, 48, 0], [0, 0, 48]] * unit.angstrom
         #print('off_box', off_top.box_vectors)
         #print('amb_box', pmd_struct.box)
-        off_sys = ff.create_openmm_system(mol.to_topology(),)#allow_nonintegral_charges=True)
+        try:
+            off_sys = ff.create_openmm_system(mol.to_topology(),)#allow_nonintegral_charges=True)
+        except Exception as e:
+            print(e)
+            continue
         #nonbonded_force = [force for force in off_sys.getForces() if isinstance(force, openmm.NonbondedForce)][0]
         #nonbonded_force.createExceptionsFromBonds([(bond.atom1.molecule_atom_index,
         #                                            bond.atom2.molecule_atom_index) for bond in mol.bonds],
