@@ -757,4 +757,4 @@ for smirnoff_tag, param_dicts in { "Bonds": bond_dicts, "Angles": angle_dicts,
 # Add the ElectrostaticsHandler, with the proper 1-4 scaling factors
 handler = ff.get_parameter_handler('Electrostatics')                
 # Write the now-populated forcefield out to OFFXML
-ff.to_file('test_backbone.offxml')
+ff.to_file('result_backbone.offxml')
