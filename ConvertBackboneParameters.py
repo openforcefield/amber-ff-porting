@@ -198,10 +198,10 @@ trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
            'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL'] #, 'CYX' ]
 
 #trmres = []
-#allres = ['ALA'] #, 'HID', 'HIE']
+#allres = ['ALA', 'MET'] #, 'HID', 'HIE']
 #allres = ['HIP', 'HID', 'HIE', 'GLY']
 #trmres = ['HIP', 'HID', 'HIE', 'GLY']
-#trmres = ['GLU']
+#trmres = ['ALA', 'MET']
 
 # Main chain, N-terminal, and C-terminal residues
 ResClasses = [ 'MainChain', 'NTerminal', 'CTerminal' ]
@@ -487,8 +487,13 @@ def involves_peptide_bond(prefix, atom_idxs):
   atom_indices_of_interest = set()
   for atom_idx in atom_idxs:
     residues_of_interest.add(pmd_struct.atoms[atom_idx].residue.idx)
-  if len(residues_of_interest & {1,2}) == 2:
-    return True
+  #print(prefix, residues_of_interest)
+  if "NTerminal" in prefix:
+    if len(residues_of_interest & {0,1}) == 2:
+      return True
+  else:
+    if len(residues_of_interest & {1,2}) == 2:
+      return True
   return False
 
   
