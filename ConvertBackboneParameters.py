@@ -181,18 +181,18 @@ def get_smarts(prefix, atom_idxs):
 
 
 # Lists of residues that can occur at various positions on the tripeptide
-#allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
-#           'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL',
-#           'CYS']
+allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
+           'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL',
+           'CYS']
            #'CYX' ]
-#trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
-#           'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL'] #, 'CYX' ]
+trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
+           'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL'] #, 'CYX' ]
 
 #trmres = []
-allres = ['ALA', 'MET'] #, 'HID', 'HIE']
+#allres = ['ALA', 'MET'] #, 'HID', 'HIE']
 #allres = ['HIP', 'HID', 'HIE', 'GLY']
 #trmres = ['HIP', 'HID', 'HIE', 'GLY']
-trmres = ['ALA', 'MET']
+#trmres = ['ALA', 'MET']
 
 # Main chain, N-terminal, and C-terminal residues
 ResClasses = [ 'MainChain', 'NTerminal', 'CTerminal' ]
@@ -757,4 +757,4 @@ for smirnoff_tag, param_dicts in { "Bonds": bond_dicts, "Angles": angle_dicts,
 # Add the ElectrostaticsHandler, with the proper 1-4 scaling factors
 handler = ff.get_parameter_handler('Electrostatics')                
 # Write the now-populated forcefield out to OFFXML
-ff.to_file('test_backbone.offxml')
+ff.to_file('result_backbone.offxml')

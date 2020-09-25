@@ -32,7 +32,7 @@ def calc_energy(omm_sys, omm_top, coords):
 
 #from openforcefield.typing.engines.smirnoff import ImproperTorsionHandler
 #ImproperTorsionHandler.ImproperTorsionType._VALENCE_TYPE = None
-ff = ForceField('test.offxml')
+ff = ForceField('result_residues.offxml')
 #ff.get_parameter_handler('ImproperTorsions')._INFOTYPE._VALENCE_TYPE = None
 
 for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
