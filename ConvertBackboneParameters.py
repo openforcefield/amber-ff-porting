@@ -7,7 +7,7 @@ from utils import fix_carboxylate_bond_orders
 import itertools
 
 from amberimpropertorsionhandler import AmberImproperTorsionHandler
-
+from malformed_tripeptides import malformed_tripeptides
 
 def props(cls):
   return [ i for i in cls.__dict__.keys() if i[:1] != '_' ]
@@ -159,7 +159,6 @@ def get_smarts(prefix, atom_idxs):
       atom_indices_of_interest.add(atom_idx)
       for neighbor in oeatom.GetAtoms():
         atom_indices_of_interest.add(neighbor.GetIdx())
-
   # Make a "Subset" molecule, so that we don't get weird charges
   # around where we cleave the residues
   subsetmol = OEChem.OEGraphMol()
@@ -179,19 +178,21 @@ def get_smarts(prefix, atom_idxs):
   return smiles
 
 
+
+
 # Lists of residues that can occur at various positions on the tripeptide
-allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
-           'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL',
-           'CYS']
+#allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
+#           'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL',
+#           'CYS']
            #'CYX' ]
 #trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
-#           'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL', 'CYX' ]
+#           'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL'] #, 'CYX' ]
 
-trmres = []
-#allres = ['ALA'] #, 'HID', 'HIE']
+#trmres = []
+allres = ['ALA', 'MET'] #, 'HID', 'HIE']
 #allres = ['HIP', 'HID', 'HIE', 'GLY']
 #trmres = ['HIP', 'HID', 'HIE', 'GLY']
-#trmres = ['GLU']
+trmres = ['ALA', 'MET']
 
 # Main chain, N-terminal, and C-terminal residues
 ResClasses = [ 'MainChain', 'NTerminal', 'CTerminal' ]
@@ -242,6 +243,9 @@ for rclass in ResClasses:
   # Loop over all residue combinations
   for resa in arange:
     for resb in arange:
+      if (rclass, (resa, resb)) in malformed_tripeptides:
+        print(f'Skipping {rclass}/{resa}_{resb} because it is known to be mis-formatted')
+        continue
       ppsys = f'{resa}_{resb}'
       topname  = os.path.join(rclass, ppsys, ppsys + '.prmtop')
       mol2name = os.path.join(rclass, ppsys, ppsys + '.mol2')
@@ -474,8 +478,13 @@ def involves_peptide_bond(prefix, atom_idxs):
   atom_indices_of_interest = set()
   for atom_idx in atom_idxs:
     residues_of_interest.add(pmd_struct.atoms[atom_idx].residue.idx)
-  if len(residues_of_interest & {1,2}) == 2:
-    return True
+  #print(prefix, residues_of_interest)
+  if "NTerminal" in prefix:
+    if len(residues_of_interest & {0,1}) == 2:
+      return True
+  else:
+    if len(residues_of_interest & {1,2}) == 2:
+      return True
   return False
 
   
