@@ -159,15 +159,6 @@ def get_smarts(prefix, atom_idxs):
       atom_indices_of_interest.add(atom_idx)
       for neighbor in oeatom.GetAtoms():
         atom_indices_of_interest.add(neighbor.GetIdx())
-        # Patch to catch N-terminal residue backbone parameters, otherwise
-        # terminal atom backbone torsion gets thrown out since it doesn't
-        # include any atoms in the next residue. 
-        for neighbor2 in neighbor.GetAtoms():
-          if ('NTerminal' in prefix and
-              neighbor2.GetFormalCharge() == 1 and
-              neighbor2.IsNitrogen()):
-            atom_indices_of_interest.add(neighbor2.GetIdx())
-
   # Make a "Subset" molecule, so that we don't get weird charges
   # around where we cleave the residues
   subsetmol = OEChem.OEGraphMol()
@@ -190,18 +181,18 @@ def get_smarts(prefix, atom_idxs):
 
 
 # Lists of residues that can occur at various positions on the tripeptide
-allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
-           'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL',
-           'CYS']
+#allres = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
+#           'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL',
+#           'CYS']
            #'CYX' ]
-trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
-           'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL'] #, 'CYX' ]
+#trmres = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP', 'ILE', 'LEU',
+#           'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL'] #, 'CYX' ]
 
 #trmres = []
-#allres = ['ALA', 'MET'] #, 'HID', 'HIE']
+allres = ['ALA', 'MET'] #, 'HID', 'HIE']
 #allres = ['HIP', 'HID', 'HIE', 'GLY']
 #trmres = ['HIP', 'HID', 'HIE', 'GLY']
-#trmres = ['ALA', 'MET']
+trmres = ['ALA', 'MET']
 
 # Main chain, N-terminal, and C-terminal residues
 ResClasses = [ 'MainChain', 'NTerminal', 'CTerminal' ]
