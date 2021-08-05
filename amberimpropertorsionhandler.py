@@ -1,6 +1,16 @@
-from openforcefield.typing.engines.smirnoff import ImproperTorsionHandler, ParameterAttribute, IndexedParameterAttribute
-from openforcefield.typing.engines.smirnoff.parameters import _allow_only
-from simtk import openmm
+try:
+    from openff.toolkit.typing.engines.smirnoff import ImproperTorsionHandler, ParameterAttribute, IndexedParameterAttribute
+    from openff.toolkit.typing.engines.smirnoff.parameters import _allow_only
+    from openff.toolkit.topology.topology import _TransformedDict
+except ImportError:
+    from openforcefield.topology.topology import _TransformedDict
+    from openforcefield.typing.engines.smirnoff import ImproperTorsionHandler, ParameterAttribute, IndexedParameterAttribute
+    from openforcefield.typing.engines.smirnoff.parameters import _allow_only
+
+try:
+    import openmm
+except ImportError:
+    from simtk import openmm
 
 # TODO: There's a lot of duplicated code in ProperTorsionHandler and ImproperTorsionHandler
 class AmberImproperTorsionHandler(ImproperTorsionHandler):
@@ -33,7 +43,6 @@ class AmberImproperTorsionHandler(ImproperTorsionHandler):
     )
     default_idivf = ParameterAttribute(default='auto')
 
-    from openforcefield.topology.topology import _TransformedDict
     class AmberImproperDict(_TransformedDict):
         """Symmetrize improper torsions."""
         

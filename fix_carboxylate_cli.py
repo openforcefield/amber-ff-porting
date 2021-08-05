@@ -1,6 +1,9 @@
 from utils import fix_carboxylate_bond_orders
 import sys
-from openforcefield.topology import Molecule
+try:
+    from openff.toolkit.topology import Molecule
+except ImportError:
+    from openforcefield.topology import Molecule
 
 if len(sys.argv) != 2:
     print("python fix_carboxylate_cli.py file.mol2")

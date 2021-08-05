@@ -1,4 +1,8 @@
-from openforcefield.typing.engines.smirnoff import ForceField
+try:
+    from openff.toolkit.typing.engines.smirnoff import ForceField
+except ImportError:
+    from openforcefield.typing.engines.smirnoff import ForceField
+
 from amberimpropertorsionhandler import AmberImproperTorsionHandler
 
 ff = ForceField('result_residues.offxml', 'result_backbone.offxml')

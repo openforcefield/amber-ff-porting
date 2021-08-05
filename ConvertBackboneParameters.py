@@ -1,10 +1,14 @@
 import sys, os, copy
 import openeye.oechem as OEChem
 import parmed as ParmEd
-from openforcefield.topology import Molecule
 from simtk import unit
 from utils import fix_carboxylate_bond_orders
 import itertools
+
+try:
+    from openff.toolkit.topology import Molecule
+except ImportError:
+    from openforcefield.topology import Molecule
 
 from amberimpropertorsionhandler import AmberImproperTorsionHandler
 from malformed_tripeptides import malformed_tripeptides
