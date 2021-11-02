@@ -1,11 +1,6 @@
-try:
-    from openff.toolkit.typing.engines.smirnoff import ImproperTorsionHandler, ParameterAttribute, IndexedParameterAttribute
-    from openff.toolkit.typing.engines.smirnoff.parameters import _allow_only
-    from openff.toolkit.topology.topology import _TransformedDict
-except ImportError:
-    from openforcefield.topology.topology import _TransformedDict
-    from openforcefield.typing.engines.smirnoff import ImproperTorsionHandler, ParameterAttribute, IndexedParameterAttribute
-    from openforcefield.typing.engines.smirnoff.parameters import _allow_only
+from openff.toolkit.typing.engines.smirnoff import ImproperTorsionHandler, ParameterAttribute, IndexedParameterAttribute
+from openff.toolkit.typing.engines.smirnoff.parameters import _allow_only
+from openff.toolkit.topology.topology import _TransformedDict
 
 try:
     import openmm
@@ -64,7 +59,7 @@ class AmberImproperTorsionHandler(ImproperTorsionHandler):
 
         Parameters
         ----------
-        entity : openforcefield.topology.Topology
+        entity : openff.toolkit.topology.Topology
             Topology to search.
 
         Returns

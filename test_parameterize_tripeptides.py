@@ -1,4 +1,3 @@
-from openforcefield.topology import Molecule
 import parmed as ParmEd
 from simtk import openmm
 from simtk.openmm import app, unit, XmlSerializer, LangevinIntegrator
@@ -7,12 +6,8 @@ from utils import fix_carboxylate_bond_orders
 import os
 import itertools
 
-try:
-    from openff.toolkit.typing.engines.smirnoff import ForceField
-    from openff.toolkit.topology import Molecule
-except ImportError:
-    from openforcefield.topology import Molecule
-    from openforcefield.typing.engines.smirnoff import ForceField
+from openff.toolkit.typing.engines.smirnoff import ForceField
+from openff.toolkit.topology import Molecule
 
 from amberimpropertorsionhandler import AmberImproperTorsionHandler
 from malformed_tripeptides import malformed_tripeptides

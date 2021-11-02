@@ -1,7 +1,4 @@
-try:
-    from openff.toolkit.typing.engines.smirnoff import ForceField
-except ImportError:
-    from openforcefield.typing.engines.smirnoff import ForceField
+from openff.toolkit.typing.engines.smirnoff import ForceField
 
 from amberimpropertorsionhandler import AmberImproperTorsionHandler
 
