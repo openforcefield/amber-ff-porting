@@ -1,10 +1,11 @@
 import sys, os, copy
 import openeye.oechem as OEChem
 import parmed as ParmEd
-from openforcefield.topology import Molecule
 from simtk import unit
 from utils import fix_carboxylate_bond_orders
 import itertools
+
+from openff.toolkit.topology import Molecule
 
 from amberimpropertorsionhandler import AmberImproperTorsionHandler
 from malformed_tripeptides import malformed_tripeptides
@@ -727,9 +728,9 @@ improper_dicts.sort(key=sort_method)
 
 
 # Initialize an empty force field
-from openforcefield.typing.engines.smirnoff import ForceField
+from openff.toolkit.typing.engines.smirnoff import ForceField
 ff = ForceField()
-ff._set_aromaticity_model('OEAroModel_MDL')
+ff.aromaticity_model = 'OEAroModel_MDL'
 
 # Loop over the parameters to convert and their corresponding SMIRNOFF header tags 
 for smirnoff_tag, param_dicts in { "Bonds": bond_dicts, "Angles": angle_dicts,
@@ -746,7 +747,7 @@ for smirnoff_tag, param_dicts in { "Bonds": bond_dicts, "Angles": angle_dicts,
   # Loop over the list of parameter dictionaries, using each one as an input to
   # handler.add_parameter.  This mimics deserializing an OFFXML into a ForceField
   # object, and will do any sanitization that we might otherwise miss
-  from openforcefield.typing.engines.smirnoff.parameters import DuplicateParameterError
+  from openff.toolkit.typing.engines.smirnoff.parameters import DuplicateParameterError
   for param_dict in param_dicts:
     try:
       handler.add_parameter(param_dict)
