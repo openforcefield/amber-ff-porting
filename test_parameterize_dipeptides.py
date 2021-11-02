@@ -1,5 +1,5 @@
-from openforcefield.topology import Molecule
-from openforcefield.typing.engines.smirnoff import ForceField
+from openff.toolkit.topology import Molecule
+from openff.toolkit.typing.engines.smirnoff import ForceField
 import parmed as ParmEd
 from simtk import openmm
 from simtk.openmm import app, unit, XmlSerializer, LangevinIntegrator
