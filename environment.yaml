@@ -1,0 +1,9 @@
+name: amber-ff-porting
+channels:
+  - openeye
+  - conda-forge
+dependencies:
+    # Base depends
+  - python
+  - openff-toolkit
+  - openeye-toolkits
