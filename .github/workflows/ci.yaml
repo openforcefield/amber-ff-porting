@@ -29,6 +29,7 @@ jobs:
         uses: mamba-org/setup-micromamba@v1
         with:
           cache-downloads: true
+          environment-name: amber-ff-porting
           condarc: |
             channels:
               - conda-forge
