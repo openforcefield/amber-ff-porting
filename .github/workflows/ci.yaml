@@ -1,0 +1,59 @@
+name: "CI"
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash -l {0}
+
+jobs:
+  tests:
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@v4
+
+      - name: "Setup Micromamba"
+        uses: mamba-org/setup-micromamba@v1
+        cache-environment: true
+        cache-downloads: true
+        condarc: |
+          channels:
+            - conda-forge
+            - openeye
+        create-args: >-
+          python=3.11
+          openff-toolkit==0.10.6
+          openeye-toolkits
+          tqdm
+        init-shell: bash
+
+      - name: "Make oe_license.txt file from GH org secret 'OE_LICENSE'"
+        env:
+          OE_LICENSE_TEXT: ${{ secrets.OE_LICENSE }}
+        run: echo "${OE_LICENSE_TEXT}" > ${OE_LICENSE}
+
+      - name: "Run FFConversion.sh"
+        run: bash ./runFFConversion.sh
+
+      - name: "Remove Stereochemistry"
+        run: |
+          sed 's/@//g' ff14sb_0.0.2.offxml > ff14sb_0.0.3.offxml
+          sed 's/@//g' ff14sb_off_impropers_0.0.2.offxml > ff14sb_off_impropers_0.0.3.offxml
+
+      - name: "Set <Bonds> Section to Default Values"
+        run: |
+          echo "Something like this, will update this later"
+          echo 'sed s/something/<Bonds version="0.4" potential="harmonic" fractional_bondorder_method="AM1-Wiberg" fractional_bondorder_interpolation="linear">/g'
