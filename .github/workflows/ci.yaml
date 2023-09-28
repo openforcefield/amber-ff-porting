@@ -41,10 +41,11 @@ jobs:
             tqdm
           init-shell: bash
 
-      - name: "Make oe_license.txt file from GH org secret 'OE_LICENSE'"
+      - name: Make oe_license.txt file from GH org secret "OE_LICENSE"
         env:
           OE_LICENSE_TEXT: ${{ secrets.OE_LICENSE }}
-        run: echo "${OE_LICENSE_TEXT}" > ${OE_LICENSE}
+        run: |
+          echo "${OE_LICENSE_TEXT}" > ${OE_LICENSE}
 
       - name: "Run FFConversion.sh"
         run: bash ./runFFConversion.sh
