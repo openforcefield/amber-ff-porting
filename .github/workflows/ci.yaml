@@ -27,18 +27,19 @@ jobs:
 
       - name: "Setup Micromamba"
         uses: mamba-org/setup-micromamba@v1
-        cache-environment: true
-        cache-downloads: true
-        condarc: |
-          channels:
-            - conda-forge
-            - openeye
-        create-args: >-
-          python=3.11
-          openff-toolkit==0.10.6
-          openeye-toolkits
-          tqdm
-        init-shell: bash
+        with:
+          cache-environment: true
+          cache-downloads: true
+          condarc: |
+            channels:
+              - conda-forge
+              - openeye
+          create-args: >-
+            python=3.11
+            openff-toolkit==0.10.6
+            openeye-toolkits
+            tqdm
+          init-shell: bash
 
       - name: "Make oe_license.txt file from GH org secret 'OE_LICENSE'"
         env:
