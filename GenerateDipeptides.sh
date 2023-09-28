@@ -48,7 +48,7 @@ for RESA in ${ALLRES} ; do
   echo "saveAmberParm x ${RESA}.prmtop ${RESA}.inpcrd" >> tleap.in
   echo "quit" >> tleap.in
   tleap -f tleap.in > tleap.out
-  pmemd -O -i ../../min.in -o min.out -p ${RESA}.prmtop -c ${RESA}.inpcrd -r mincrd
+  sander -O -i ../../min.in -o min.out -p ${RESA}.prmtop -c ${RESA}.inpcrd -r mincrd
   mv mincrd ${RESA}.inpcrd
   ambpdb -p ${RESA}.prmtop < ${RESA}.inpcrd > ${RESA}.pdb
   echo "source leaprc.protein.ff14SB" > tleap2.in
@@ -86,7 +86,7 @@ for RESA in ${TRMRES} ; do
   echo "saveAmberParm x ${RESA}.prmtop ${RESA}.inpcrd" >> tleap.in
   echo "quit" >> tleap.in
   tleap -f tleap.in > tleap.out
-  pmemd -O -i ../../min.in -o min.out -p ${RESA}.prmtop -c ${RESA}.inpcrd -r mincrd
+  sander -O -i ../../min.in -o min.out -p ${RESA}.prmtop -c ${RESA}.inpcrd -r mincrd
   mv mincrd ${RESA}.inpcrd
   ambpdb -p ${RESA}.prmtop < ${RESA}.inpcrd > ${RESA}.pdb
   echo "source leaprc.protein.ff14SB" > tleap2.in
@@ -124,7 +124,7 @@ for RESA in ${TRMRES} ; do
   echo "saveAmberParm x ${RESA}.prmtop ${RESA}.inpcrd" >> tleap.in
   echo "quit" >> tleap.in
   tleap -f tleap.in > tleap.out
-  pmemd -O -i ../../min.in -o min.out -p ${RESA}.prmtop -c ${RESA}.inpcrd -r mincrd
+  sander -O -i ../../min.in -o min.out -p ${RESA}.prmtop -c ${RESA}.inpcrd -r mincrd
   mv mincrd ${RESA}.inpcrd
   ambpdb -p ${RESA}.prmtop < ${RESA}.inpcrd > ${RESA}.pdb
   echo "source leaprc.protein.ff14SB" > tleap2.in
