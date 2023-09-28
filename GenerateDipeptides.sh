@@ -112,7 +112,7 @@ for RESA in ${TRMRES} ; do
   if [ -d ${RESA} ] ; then
     continue
   fi
-  echo "${RESA} ${RESB}"
+  echo "${RESA}"
   mkdir -p ${RESA}
   cd ${RESA}/
   echo "source leaprc.protein.ff14SB" > tleap.in
