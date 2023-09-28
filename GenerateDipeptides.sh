@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -euo pipefail
 
 ALLRES="ALA ARG ASH ASN ASP CYS GLH GLN GLU GLY HID HIE HIP ILE LEU LYN LYS MET PHE PRO SER"
 ALLRES="${ALLRES} THR TRP TYR VAL CYX CYM"
