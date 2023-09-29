@@ -51,6 +51,7 @@ jobs:
       - name: "Run FFConversion.sh"
         run: |
           # Unzip saved peptides
+          which tleap
           tar -xvzf AllDipeptides.tar.gz
           tar -xvzf AllTripeptides.tar.gz
           
