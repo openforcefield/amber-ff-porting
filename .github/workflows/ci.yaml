@@ -65,3 +65,18 @@ jobs:
 
       - name: "Run Benchmark"
         run: bash runFFBenchmark.sh
+
+      - name: "Print Benchmark Results"
+        run: |
+          python SortResult.py parameterize_dipeptides.out 
+          python SortResult.py parameterize_tripeptides.out
+
+      - name: "Upload Artifacts"
+        uses: actions/upload-artifact@v3
+        with:
+          path: |
+            parameterize_dipeptides.out
+            parameterize_tripeptides.out
+            result_residues.offxml
+            result_backbone.offxml
+            result_merged.offxml
