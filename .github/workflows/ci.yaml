@@ -13,7 +13,7 @@ concurrency:
 
 defaults:
   run:
-    shell: bash -l {0}
+    shell: bash -leuo pipefail {0}
 
 jobs:
   tests:
