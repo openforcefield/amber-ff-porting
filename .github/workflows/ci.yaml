@@ -63,16 +63,5 @@ jobs:
           python ConvertBackboneParameters.py
           python CombineOffxmls.py
 
-
-      - name: "Remove Stereochemistry"
-        run: |
-          sed 's/@//g' reduced.offxml > ff14sb_0.0.3.offxml
-          sed 's/@//g' reduced_off_impropers.offxml > ff14sb_off_impropers_0.0.3.offxml
-
-      - name: "Set <Bonds> Section to Default Values"
-        run: |
-          echo "Something like this, will update this later"
-          echo 'sed s/something/<Bonds version="0.4" potential="harmonic" fractional_bondorder_method="AM1-Wiberg" fractional_bondorder_interpolation="linear">/g'
-
       - name: "Run Benchmark"
         run: bash runFFBenchmark.sh
