@@ -52,8 +52,8 @@ jobs:
         run: |
           # Unzip saved peptides
           which tleap
-          tar -xvzf AllDipeptides.tar.gz
-          tar -xvzf AllTripeptides.tar.gz
+          tar -xzf AllDipeptides.tar.gz
+          tar -xzf AllTripeptides.tar.gz
           
           # Fill in any missing ones
           bash GenerateDipeptides.sh
