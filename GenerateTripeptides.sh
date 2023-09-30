@@ -57,7 +57,7 @@ for RESA in ${ALLRES} ; do
     echo "set x box { 48.0 48.0 48.0 }" >> tleap.in
     echo "saveAmberParm x ${RESA}_${RESB}.prmtop ${RESA}_${RESB}.inpcrd" >> tleap.in
     echo "quit" >> tleap.in
-    tleap -f tleap.in > tleap.out
+    tleap -f tleap.in | tee tleap.out
     sander -O -i ../../min.in -o min.out -p ${RESA}_${RESB}.prmtop -c ${RESA}_${RESB}.inpcrd \
           -r mincrd
     mv mincrd ${RESA}_${RESB}.inpcrd
@@ -72,9 +72,9 @@ for RESA in ${ALLRES} ; do
     echo "set x box { 48.0 48.0 48.0 }" >> tleap2.in
     echo "saveMol2 x ${RESA}_${RESB}.mol2 1" >> tleap2.in
     echo "quit" >> tleap2.in
-    tleap -f tleap2.in > tleap2.out
+    tleap -f tleap2.in | tee tleap2.out
     antechamber -i ${RESA}_${RESB}.mol2 -fi mol2 -o ${RESA}_${RESB}.mol2 -fo mol2 -at sybyl \
-		-dr no > ac.out
+		-dr no | tee ac.out
     cd ../
   done
 done
@@ -107,7 +107,7 @@ for RESA in ${TRMRES} ; do
     echo "set x box { 48.0 48.0 48.0 }" >> tleap.in
     echo "saveAmberParm x ${RESA}_${RESB}.prmtop ${RESA}_${RESB}.inpcrd" >> tleap.in
     echo "quit" >> tleap.in
-    tleap -f tleap.in > tleap.out
+    tleap -f tleap.in | tee tleap.out
     sander -O -i ../../min.in -o min.out -p ${RESA}_${RESB}.prmtop -c ${RESA}_${RESB}.inpcrd \
           -r mincrd
     mv mincrd ${RESA}_${RESB}.inpcrd
@@ -122,9 +122,9 @@ for RESA in ${TRMRES} ; do
     echo "set x box { 48.0 48.0 48.0 }" >> tleap2.in
     echo "saveMol2 x ${RESA}_${RESB}.mol2 1" >> tleap2.in
     echo "quit" >> tleap2.in
-    tleap -f tleap2.in > tleap2.out
+    tleap -f tleap2.in | tee tleap2.out
     antechamber -i ${RESA}_${RESB}.mol2 -fi mol2 -o ${RESA}_${RESB}.mol2 -fo mol2 -at sybyl \
-                -dr no > ac.out
+                -dr no | tee ac.out
     cd ../
   done
 done
@@ -157,7 +157,7 @@ for RESA in ${ALLRES} ; do
     echo "set x box { 48.0 48.0 48.0 }" >> tleap.in
     echo "saveAmberParm x ${RESA}_${RESB}.prmtop ${RESA}_${RESB}.inpcrd" >> tleap.in
     echo "quit" >> tleap.in
-    tleap -f tleap.in > tleap.out
+    tleap -f tleap.in | tee tleap.out
     sander -O -i ../../min.in -o min.out -p ${RESA}_${RESB}.prmtop -c ${RESA}_${RESB}.inpcrd \
           -r mincrd
     mv mincrd ${RESA}_${RESB}.inpcrd
@@ -172,9 +172,9 @@ for RESA in ${ALLRES} ; do
     echo "set x box { 48.0 48.0 48.0 }" >> tleap2.in
     echo "saveMol2 x ${RESA}_${RESB}.mol2 1" >> tleap2.in
     echo "quit" >> tleap2.in
-    tleap -f tleap2.in > tleap2.out
+    tleap -f tleap2.in | tee tleap2.out
     antechamber -i ${RESA}_${RESB}.mol2 -fi mol2 -o ${RESA}_${RESB}.mol2 -fo mol2 -at sybyl \
-                -dr no > ac.out
+                -dr no | tee ac.out
     cd ../
   done
 done

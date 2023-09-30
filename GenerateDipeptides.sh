@@ -50,7 +50,7 @@ for RESA in ${ALLRES} ; do
   echo "set x box { 48.0 48.0 48.0 }" >> tleap.in
   echo "saveAmberParm x ${RESA}.prmtop ${RESA}.inpcrd" >> tleap.in
   echo "quit" >> tleap.in
-  tleap -f tleap.in > tleap.out
+  tleap -f tleap.in | tee tleap.out
   sander -O -i ../../min.in -o min.out -p ${RESA}.prmtop -c ${RESA}.inpcrd -r mincrd
   mv mincrd ${RESA}.inpcrd
   ambpdb -p ${RESA}.prmtop < ${RESA}.inpcrd > ${RESA}.pdb
@@ -62,7 +62,7 @@ for RESA in ${ALLRES} ; do
   echo "set x box { 48.0 48.0 48.0 }" >> tleap2.in
   echo "saveMol2 x ${RESA}.mol2 1" >> tleap2.in
   echo "quit" >> tleap2.in
-  tleap -f tleap2.in > tleap2.out
+  tleap -f tleap2.in | tee tleap2.out
   antechamber -i ${RESA}.mol2 -fi mol2 -o ${RESA}.mol2 -fo mol2 -at sybyl -dr no > ac.out
   cd ../
 done
@@ -88,7 +88,7 @@ for RESA in ${TRMRES} ; do
   echo "set x box { 48.0 48.0 48.0 }" >> tleap.in
   echo "saveAmberParm x ${RESA}.prmtop ${RESA}.inpcrd" >> tleap.in
   echo "quit" >> tleap.in
-  tleap -f tleap.in > tleap.out
+  tleap -f tleap.in | tee tleap.out
   sander -O -i ../../min.in -o min.out -p ${RESA}.prmtop -c ${RESA}.inpcrd -r mincrd
   mv mincrd ${RESA}.inpcrd
   ambpdb -p ${RESA}.prmtop < ${RESA}.inpcrd > ${RESA}.pdb
@@ -100,8 +100,8 @@ for RESA in ${TRMRES} ; do
   echo "set x box { 48.0 48.0 48.0 }" >> tleap2.in
   echo "saveMol2 x ${RESA}.mol2 1" >> tleap2.in
   echo "quit" >> tleap2.in
-  tleap -f tleap2.in > tleap2.out
-  antechamber -i ${RESA}.mol2 -fi mol2 -o ${RESA}.mol2 -fo mol2 -at sybyl -dr no > ac.out
+  tleap -f tleap2.in | tee tleap2.out
+  antechamber -i ${RESA}.mol2 -fi mol2 -o ${RESA}.mol2 -fo mol2 -at sybyl -dr no | tee ac.out
   cd ../
 done
 cd ../
@@ -126,7 +126,7 @@ for RESA in ${TRMRES} ; do
   echo "set x box { 48.0 48.0 48.0 }" >> tleap.in
   echo "saveAmberParm x ${RESA}.prmtop ${RESA}.inpcrd" >> tleap.in
   echo "quit" >> tleap.in
-  tleap -f tleap.in > tleap.out
+  tleap -f tleap.in | tee tleap.out
   sander -O -i ../../min.in -o min.out -p ${RESA}.prmtop -c ${RESA}.inpcrd -r mincrd
   mv mincrd ${RESA}.inpcrd
   ambpdb -p ${RESA}.prmtop < ${RESA}.inpcrd > ${RESA}.pdb
@@ -138,8 +138,8 @@ for RESA in ${TRMRES} ; do
   echo "set x box { 48.0 48.0 48.0 }" >> tleap2.in
   echo "saveMol2 x ${RESA}.mol2 1" >> tleap2.in
   echo "quit" >> tleap2.in
-  tleap -f tleap2.in > tleap2.out
-  antechamber -i ${RESA}.mol2 -fi mol2 -o ${RESA}.mol2 -fo mol2 -at sybyl -dr no > ac.out
+  tleap -f tleap2.in | tee tleap2.out
+  antechamber -i ${RESA}.mol2 -fi mol2 -o ${RESA}.mol2 -fo mol2 -at sybyl -dr no | tee ac.out
   cd ../
 done
 cd ../
