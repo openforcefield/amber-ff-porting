@@ -33,6 +33,7 @@ for i, line in enumerate(fmem):
   if (len(tags) < 3):
     continue
   residue = tags[1]
+  print(line, tags)
   ambBonds = 0.0
   ambAngls = 0.0
   ambDihes = 0.0
