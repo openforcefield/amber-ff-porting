@@ -39,15 +39,21 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
     #prefix = os.path.join('tests', 'issue_2_c_term_charge', folder, 'PRO', 'PRO')
     #resnames = ['GLY', 'ALA', 'PHE']
     if (folder == 'MainChain'):
+      """
       resnames = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY',  'HID', 'HIE', 'HIP',
                    'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',
                    'CYX', 'CYS']
+      """
+      resnames = ['ARG', 'HID', 'HIE', 'HIP']
       #resnames = ['HIP', 'HIE', 'HID', 'GLY']
       #resnames = ['CYS', 'CYX']#, 'HIE', 'HID']
     else:
+      """
       resnames = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
                    'ILE', 'LEU', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',
                    'CYX', 'CYS' ]
+      """
+      resnames = ['ARG', 'HID', 'HIE', 'HIP']
       #resnames = ['HIP', 'HIE', 'HID', 'GLY']
       #resnames = ['CYS', 'CYX']
     for resname in resnames:
