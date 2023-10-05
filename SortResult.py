@@ -23,7 +23,6 @@ def print_group(D):
 
 fi = open(sys.argv[1], 'r')
 fmem = [ line for line in fi ]
-print(fmem)
 mainch = {}
 nterm  = {}
 cterm  = {}
@@ -33,14 +32,12 @@ for i, line in enumerate(fmem):
   if (len(tags) < 3):
     continue
   residue = tags[1]
-  print(line, tags)
   ambBonds = 0.0
   ambAngls = 0.0
   ambDihes = 0.0
   ambNonbs = 0.0
   for j in range(1, 6):
     ttl = fmem[i+j].split()
-    print(ttl)
     if (ttl[0] == 'HarmonicBondForce'):
       ambBonds = float(ttl[1])
     elif (ttl[0] == 'HarmonicAngleForce'):
@@ -55,7 +52,6 @@ for i, line in enumerate(fmem):
   offNonbs = 0.0
   for j in range(6, 11):
     ttl = fmem[i+j].split()
-    print(ttl)
     if (ttl[0] == 'HarmonicBondForce'):
       offBonds = float(ttl[1])
     elif (ttl[0] == 'HarmonicAngleForce'):
