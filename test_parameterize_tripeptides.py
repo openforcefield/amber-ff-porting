@@ -99,9 +99,12 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
         #print('amb_box', pmd_struct.box)
         try:
             off_sys = ff.create_openmm_system(mol.to_topology(),)#allow_nonintegral_charges=True)
-        except Exception as e:
-            print(e)
-            continue
+        except Exception:
+            try:
+              off_sys = ff.create_openmm_system(mol.to_topology(), allow_nonintegral_charges=True)
+            except Exception as e:
+              print(e)
+              continue
         #nonbonded_force = [force for force in off_sys.getForces() if isinstance(force, openmm.NonbondedForce)][0]
         #nonbonded_force.createExceptionsFromBonds([(bond.atom1.molecule_atom_index,
         #                                            bond.atom2.molecule_atom_index) for bond in mol.bonds],
