@@ -1,0 +1,83 @@
+name: "CI"
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash -leo pipefail {0}
+
+jobs:
+  tests:
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@v4
+
+      - name: "Setup Micromamba"
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          cache-downloads: true
+          environment-name: amber-ff-porting
+          condarc: |
+            channels:
+              - conda-forge
+              - openeye
+          create-args: >-
+            python=3.11
+            openff-toolkit==0.10.6
+            openeye-toolkits
+            tqdm
+          init-shell: bash
+
+      - name: Make oe_license.txt file from GH org secret "OE_LICENSE"
+        env:
+          OE_LICENSE: ${{ github.workspace }}/oe_license.txt
+          OE_LICENSE_TEXT: ${{ secrets.OE_LICENSE }}
+        run: |
+          echo "${OE_LICENSE_TEXT}" > ${OE_LICENSE}
+
+      - name: "Run FFConversion.sh"
+        run: |
+          # Unzip saved peptides
+          which tleap
+          tar -xzf AllDipeptides.tar.gz
+          tar -xzf AllTripeptides.tar.gz
+          
+          # Fill in any missing ones
+          bash GenerateDipeptides.sh
+          bash GenerateTripeptides.sh
+          
+          # Do FF Conversion
+          python ConvertResidueParameters.py
+          python ConvertBackboneParameters.py
+          python CombineOffxmls.py
+
+      - name: "Run Benchmark"
+        run: bash runFFBenchmark.sh
+
+      - name: "Print Benchmark Results"
+        run: |
+          python SortResult.py parameterize_dipeptides.out 
+          python SortResult.py parameterize_tripeptides.out
+
+      - name: "Upload Artifacts"
+        uses: actions/upload-artifact@v3
+        with:
+          path: |
+            parameterize_dipeptides.out
+            parameterize_tripeptides.out
+            result_residues.offxml
+            result_backbone.offxml
+            result_merged.offxml

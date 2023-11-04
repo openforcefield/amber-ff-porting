@@ -1,7 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -x
+set -euo pipefail
 
 ALLRES="ALA ARG ASH ASN ASP CYS GLH GLN GLU GLY HID HIE HIP ILE LEU LYN LYS MET PHE PRO SER"
-ALLRES="${ALLRES} THR TRP TYR VAL CYX"
+ALLRES="${ALLRES} THR TRP TYR VAL CYX CYM"
 
 TRMRES="ALA ARG ASN ASP CYS GLN GLU GLY HID HIE HIP ILE LEU LYS MET PHE PRO SER"
 TRMRES="${TRMRES} THR TRP TYR VAL CYX"
@@ -47,8 +50,8 @@ for RESA in ${ALLRES} ; do
   echo "set x box { 48.0 48.0 48.0 }" >> tleap.in
   echo "saveAmberParm x ${RESA}.prmtop ${RESA}.inpcrd" >> tleap.in
   echo "quit" >> tleap.in
-  tleap -f tleap.in > tleap.out
-  pmemd -O -i ../../min.in -o min.out -p ${RESA}.prmtop -c ${RESA}.inpcrd -r mincrd
+  tleap -f tleap.in | tee tleap.out
+  sander -O -i ../../min.in -o min.out -p ${RESA}.prmtop -c ${RESA}.inpcrd -r mincrd
   mv mincrd ${RESA}.inpcrd
   ambpdb -p ${RESA}.prmtop < ${RESA}.inpcrd > ${RESA}.pdb
   echo "source leaprc.protein.ff14SB" > tleap2.in
@@ -59,7 +62,7 @@ for RESA in ${ALLRES} ; do
   echo "set x box { 48.0 48.0 48.0 }" >> tleap2.in
   echo "saveMol2 x ${RESA}.mol2 1" >> tleap2.in
   echo "quit" >> tleap2.in
-  tleap -f tleap2.in > tleap2.out
+  tleap -f tleap2.in | tee tleap2.out
   antechamber -i ${RESA}.mol2 -fi mol2 -o ${RESA}.mol2 -fo mol2 -at sybyl -dr no > ac.out
   cd ../
 done
@@ -85,8 +88,8 @@ for RESA in ${TRMRES} ; do
   echo "set x box { 48.0 48.0 48.0 }" >> tleap.in
   echo "saveAmberParm x ${RESA}.prmtop ${RESA}.inpcrd" >> tleap.in
   echo "quit" >> tleap.in
-  tleap -f tleap.in > tleap.out
-  pmemd -O -i ../../min.in -o min.out -p ${RESA}.prmtop -c ${RESA}.inpcrd -r mincrd
+  tleap -f tleap.in | tee tleap.out
+  sander -O -i ../../min.in -o min.out -p ${RESA}.prmtop -c ${RESA}.inpcrd -r mincrd
   mv mincrd ${RESA}.inpcrd
   ambpdb -p ${RESA}.prmtop < ${RESA}.inpcrd > ${RESA}.pdb
   echo "source leaprc.protein.ff14SB" > tleap2.in
@@ -97,8 +100,8 @@ for RESA in ${TRMRES} ; do
   echo "set x box { 48.0 48.0 48.0 }" >> tleap2.in
   echo "saveMol2 x ${RESA}.mol2 1" >> tleap2.in
   echo "quit" >> tleap2.in
-  tleap -f tleap2.in > tleap2.out
-  antechamber -i ${RESA}.mol2 -fi mol2 -o ${RESA}.mol2 -fo mol2 -at sybyl -dr no > ac.out
+  tleap -f tleap2.in | tee tleap2.out
+  antechamber -i ${RESA}.mol2 -fi mol2 -o ${RESA}.mol2 -fo mol2 -at sybyl -dr no | tee ac.out
   cd ../
 done
 cd ../
@@ -110,7 +113,7 @@ for RESA in ${TRMRES} ; do
   if [ -d ${RESA} ] ; then
     continue
   fi
-  echo "${RESA} ${RESB}"
+  echo "${RESA}"
   mkdir -p ${RESA}
   cd ${RESA}/
   echo "source leaprc.protein.ff14SB" > tleap.in
@@ -123,8 +126,8 @@ for RESA in ${TRMRES} ; do
   echo "set x box { 48.0 48.0 48.0 }" >> tleap.in
   echo "saveAmberParm x ${RESA}.prmtop ${RESA}.inpcrd" >> tleap.in
   echo "quit" >> tleap.in
-  tleap -f tleap.in > tleap.out
-  pmemd -O -i ../../min.in -o min.out -p ${RESA}.prmtop -c ${RESA}.inpcrd -r mincrd
+  tleap -f tleap.in | tee tleap.out
+  sander -O -i ../../min.in -o min.out -p ${RESA}.prmtop -c ${RESA}.inpcrd -r mincrd
   mv mincrd ${RESA}.inpcrd
   ambpdb -p ${RESA}.prmtop < ${RESA}.inpcrd > ${RESA}.pdb
   echo "source leaprc.protein.ff14SB" > tleap2.in
@@ -135,8 +138,8 @@ for RESA in ${TRMRES} ; do
   echo "set x box { 48.0 48.0 48.0 }" >> tleap2.in
   echo "saveMol2 x ${RESA}.mol2 1" >> tleap2.in
   echo "quit" >> tleap2.in
-  tleap -f tleap2.in > tleap2.out
-  antechamber -i ${RESA}.mol2 -fi mol2 -o ${RESA}.mol2 -fo mol2 -at sybyl -dr no > ac.out
+  tleap -f tleap2.in | tee tleap2.out
+  antechamber -i ${RESA}.mol2 -fi mol2 -o ${RESA}.mol2 -fo mol2 -at sybyl -dr no | tee ac.out
   cd ../
 done
 cd ../

@@ -43,8 +43,9 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
     #resnames = ['GLY', 'ALA', 'PHE']
     if (folder == 'MainChain'):
       resnames = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY',  'HID', 'HIE', 'HIP',
-                   'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',]
+                   'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP', ]
                    #'CYX' ]
+      # resnames = ['ARG', 'HID', 'HIE', 'HIP']
       #resnames = ['HIP', 'HIE', 'HID', 'GLY']
       #resnames = ['ALA', 'GLY', 'PRO', 'CYS']#, 'HIE', 'HID']
 
@@ -52,6 +53,7 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
       resnames = [ 'ALA', 'ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'GLY', 'HID', 'HIE', 'HIP',
                    'ILE', 'LEU', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',
                    'CYX' ]
+      resnames = ['ARG', 'HID', 'HIE', 'HIP']
       #resnames = ['HIP', 'HIE', 'HID', 'GLY']
       #resnames = []
     for resa, resb in itertools.permutations(resnames, 2):
@@ -93,9 +95,12 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
         #print('amb_box', pmd_struct.box)
         try:
             off_sys = ff.create_openmm_system(mol.to_topology(),)#allow_nonintegral_charges=True)
-        except Exception as e:
-            print(e)
-            continue
+        except Exception:
+            try:
+              off_sys = ff.create_openmm_system(mol.to_topology(), allow_nonintegral_charges=True)
+            except Exception as e:
+              print(e)
+              continue
         #nonbonded_force = [force for force in off_sys.getForces() if isinstance(force, openmm.NonbondedForce)][0]
         #nonbonded_force.createExceptionsFromBonds([(bond.atom1.molecule_atom_index,
         #                                            bond.atom2.molecule_atom_index) for bond in mol.bonds],

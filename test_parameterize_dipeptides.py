@@ -41,7 +41,7 @@ for folder in ['MainChain', 'CTerminal', 'NTerminal']:#, 'MainChain']:
     if (folder == 'MainChain'):
       resnames = [ 'ALA', 'ARG', 'ASH', 'ASN', 'ASP', 'GLH', 'GLN', 'GLU', 'GLY',  'HID', 'HIE', 'HIP',
                    'ILE', 'LEU', 'LYN', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TYR', 'VAL', 'TRP',
-                   'CYX', 'CYS']
+                   'CYX', 'CYS', 'CYM']
       #resnames = ['HIP', 'HIE', 'HID', 'GLY']
       #resnames = ['CYS', 'CYX']#, 'HIE', 'HID']
     else:
